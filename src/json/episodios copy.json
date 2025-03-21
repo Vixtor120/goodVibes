@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Episodio I - Presentación de Good Vibes",
+    "description": "Primer episodio donde hablamos sobre el propósito de Good Vibes, por qué decidimos iniciar este podcast y cómo queremos generar conversación y reflexión combinando temas de tecnología, psicología y comportamiento humano.",
+    "duration": "8:00",
+    "date": "21 Mar 2025",
+    "imageUrl": "/images/episodes/6.png",
+    "videoUrl": "/videos/episode1.mp4"
+  },
+  {
+    "id": 2,
+    "title": "Episodio II - Hablando de la IA en General",
+    "description": "Exploramos los orígenes de la inteligencia artificial, sus hitos más importantes, y cómo está cambiando diversos sectores como la medicina, la educación y la industria. También analizamos los beneficios, riesgos y el futuro de la IA.",
+    "duration": "10:00",
+    "date": "25 Mar 2025",
+    "imageUrl": "/images/episodes/5.png",
+    "videoUrl": "/videos/episode2.mp4"
+  },
+  {
+    "id": 3,
+    "title": "Episodio III - La Psicología de las Redes Sociales",
+    "description": "Analizamos cómo las redes sociales han cambiado nuestra forma de interactuar, su impacto en la autoestima y salud mental, y los elementos de diseño que fomentan la adicción. Además, exploramos el equilibrio adecuado entre la vida online y offline.",
+    "duration": "10:00",
+    "date": "28 Mar 2025",
+    "imageUrl": "/images/episodes/4.png",
+    "videoUrl": "/videos/episode3.mp4"
+  }
+]
