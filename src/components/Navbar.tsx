@@ -1,35 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Bell, Home, Headphones, Mail, Radio, Youtube, Settings} from 'lucide-react';
+import { Menu, X, Bell, Home, Headphones, Mail, Radio, Youtube, Settings, Check, Info, CheckCheck, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [scrollActivo, setScrollActivo] = useState(false);
-  const [notificaciones] = useState([
-    { message: '¡Disfruta YA de nuestros primeros EPISODIOS!', type: 'info' },
+  const [notificaciones, setNotificaciones] = useState([
+    { 
+      id: 1,
+      message: '¡Disfruta YA de nuestros primeros EPISODIOS!', 
+      type: 'info',
+      date: new Date(Date.now() - 60000).toISOString(), // Hace 1 minuto
+      read: false,
+      link: '/episodios'
+    }
   ]);
+  
+  const [filteredNotifications, setFilteredNotifications] = useState(notificaciones);
+  const [activeFilter, setActiveFilter] = useState('all');
+  const notificacionesRef = useRef<HTMLDivElement>(null);
   const [notificacionesAbiertas, setNotificacionesAbiertas] = useState(false);
   const [hayNotificaciones, setHayNotificaciones] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     function detectarScroll() {
-      if (window.scrollY > 20) {
-        setScrollActivo(true);
-      } else {
-        setScrollActivo(false);
-      }
+      setScrollActivo(window.scrollY > 20);
     }
 
     window.addEventListener('scroll', detectarScroll);
-    
     return () => {
       window.removeEventListener('scroll', detectarScroll);
     };
   }, []);
 
-  // Cerrar menús cuando cambia la ruta
   useEffect(() => {
     setMenuAbierto(false);
     setNotificacionesAbiertas(false);
@@ -48,6 +53,118 @@ function Navbar() {
     if (menuAbierto) setMenuAbierto(false);
   }
 
+  // Calcular tiempo relativo para las notificaciones
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+    
+    if (diffDays > 0) {
+      return diffDays === 1 ? 'Ayer' : `Hace ${diffDays} días`;
+    } else if (diffHours > 0) {
+      return diffHours === 1 ? 'Hace 1 hora' : `Hace ${diffHours} horas`;
+    } else if (diffMins > 0) {
+      return diffMins === 1 ? 'Hace 1 minuto' : `Hace ${diffMins} minutos`;
+    } else {
+      return 'Ahora mismo';
+    }
+  };
+
+  // Filtrar notificaciones
+  const filterNotifications = (filter: string) => {
+    setActiveFilter(filter);
+    if (filter === 'all') {
+      setFilteredNotifications(notificaciones);
+    } else if (filter === 'unread') {
+      setFilteredNotifications(notificaciones.filter(notif => !notif.read));
+    }
+  };
+
+  // Marcar notificación como leída
+  const markAsRead = (id: number) => {
+    const updatedNotifications = notificaciones.map(notif => 
+      notif.id === id ? { ...notif, read: true } : notif
+    );
+    setNotificaciones(updatedNotifications);
+    setFilteredNotifications(
+      activeFilter === 'all' 
+        ? updatedNotifications 
+        : updatedNotifications.filter(notif => !notif.read)
+    );
+  };
+
+  // Marcar todas las notificaciones como leídas
+  const markAllAsRead = () => {
+    const updatedNotifications = notificaciones.map(notif => ({ ...notif, read: true }));
+    setNotificaciones(updatedNotifications);
+    setFilteredNotifications(
+      activeFilter === 'all' 
+        ? updatedNotifications 
+        : []
+    );
+    setHayNotificaciones(false);
+  };
+
+  // Obtener ícono según el tipo de notificación
+  const getNotificationIcon = (type: string) => {
+    switch(type) {
+      case 'info':
+        return <Info size={16} className="text-blue-400" />;
+      case 'success':
+        return <Check size={16} className="text-green-400" />;
+      case 'new':
+        return <Volume2 size={16} className="text-purple-400" />;
+      default:
+        return <Bell size={16} className="text-blue-400" />;
+    }
+  };
+
+  // Obtener color de fondo según el tipo de notificación
+  const getNotificationBg = (type: string) => {
+    switch(type) {
+      case 'info':
+        return 'bg-blue-500/20';
+      case 'success':
+        return 'bg-green-500/20';
+      case 'new':
+        return 'bg-purple-500/20';
+      default:
+        return 'bg-blue-500/20';
+    }
+  };
+
+  // Cerrar notificaciones cuando se hace clic fuera
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificacionesRef.current && !notificacionesRef.current.contains(event.target as Node)) {
+        setNotificacionesAbiertas(false);
+      }
+    }
+    
+    if (notificacionesAbiertas) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [notificacionesAbiertas]);
+
+  // Actualizar contador de notificaciones no leídas
+  useEffect(() => {
+    setHayNotificaciones(notificaciones.some(notif => !notif.read));
+    setFilteredNotifications(
+      activeFilter === 'all' 
+        ? notificaciones 
+        : notificaciones.filter(notif => !notif.read)
+    );
+  }, [notificaciones, activeFilter]);
+
   return (
     <>
       <header className={`fixed w-full z-50 transition-all duration-300 ${
@@ -59,7 +176,7 @@ function Navbar() {
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20">
-            {/* Logo con transición y animación mejorada */}
+            {/* Logo */}
             <motion.a 
               href="/" 
               className="flex items-center gap-2 sm:gap-3 group"
@@ -82,7 +199,7 @@ function Navbar() {
               </motion.div>
             </motion.a>
 
-            {/* Navegación desktop con diseño moderno */}
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-1 lg:space-x-3">
               {[
                 { path: '/', icon: <Home size={16} className="mr-1.5" />, label: 'Home' },
@@ -114,9 +231,9 @@ function Navbar() {
               ))}
             </nav>
 
-            {/* Acciones de la derecha - Adaptable a tamaño de la pantalla */}
+            {/* Right-side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              {/* YouTube Button - Adaptable */}
+              {/* YouTube Button - Large screens */}
               <motion.div 
                 className="hidden lg:block"
                 whileHover={{ y: -2 }}
@@ -133,7 +250,7 @@ function Navbar() {
                 </a>
               </motion.div>
               
-              {/* YouTube icon only para pantallas small-medium */}
+              {/* YouTube icon only for Medium screens */}
               <motion.div
                 className="hidden sm:block lg:hidden"
                 whileHover={{ y: -2 }}
@@ -149,8 +266,8 @@ function Navbar() {
                 </a>
               </motion.div>
               
-              {/* Notifications Button - Desktop y Tablet */}
-              <div className="hidden sm:block relative">
+              {/* Notifications Button - Improved version */}
+              <div className="hidden sm:block relative" ref={notificacionesRef}>
                 <motion.button 
                   onClick={toggleNotificaciones}
                   className="p-2 rounded-xl bg-gray-800/70 hover:bg-gray-700/90 text-white transition-all duration-300"
@@ -167,49 +284,118 @@ function Navbar() {
                   )}
                 </motion.button>
 
-                {/* Notificaciones panel mejorado */}
+                {/* Enhanced Notifications Panel */}
                 <AnimatePresence>
                   {notificacionesAbiertas && (
                     <motion.div 
-                      className="absolute right-0 mt-2 w-72 bg-gray-900/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-800/60 overflow-hidden z-20"
+                      className="absolute right-0 mt-2 w-80 bg-gray-900/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-800/60 overflow-hidden z-20"
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
                     >
+                      {/* Header with filters */}
                       <div className="p-3 bg-gradient-to-r from-gray-800 to-gray-800/70 border-b border-gray-700/60">
-                        <h3 className="text-white text-sm font-medium flex items-center">
-                          <Bell size={14} className="mr-2 text-purple-400" />
-                          Notificaciones
-                        </h3>
+                        <div className="flex justify-between items-center">
+                          <h3 className="text-white text-sm font-medium flex items-center">
+                            <Bell size={14} className="mr-2 text-purple-400" />
+                            Notificaciones
+                          </h3>
+                          <div className="flex space-x-1 text-xs">
+                            <button 
+                              className={`px-2 py-1 rounded transition-colors ${activeFilter === 'all' ? 'bg-purple-600/40 text-white' : 'text-gray-400 hover:text-white'}`}
+                              onClick={() => filterNotifications('all')}
+                            >
+                              Todas
+                            </button>
+                            <button 
+                              className={`px-2 py-1 rounded transition-colors ${activeFilter === 'unread' ? 'bg-purple-600/40 text-white' : 'text-gray-400 hover:text-white'}`}
+                              onClick={() => filterNotifications('unread')}
+                            >
+                              No leídas
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="max-h-[60vh] overflow-y-auto divide-y divide-gray-800/30">
-                        {notificaciones.map((notificacion, index) => (
-                          <motion.div 
-                            key={index} 
-                            className="p-3 hover:bg-blue-500/10 transition-colors"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <div className="flex gap-3">
-                              <div className="bg-blue-500/20 p-2 rounded-full flex-shrink-0">
-                                <Bell size={16} className="text-blue-400" />
-                              </div>
-                              <div>
-                                <p className="text-sm text-gray-200">{notificacion.message}</p>
-                                <p className="text-xs text-gray-500 mt-1">Ahora</p>
-                              </div>
+                      
+                      {/* Notification list */}
+                      <div className="max-h-[60vh] overflow-y-auto">
+                        {filteredNotifications.length > 0 ? (
+                          <div className="divide-y divide-gray-800/30">
+                            {filteredNotifications.map((notificacion) => (
+                              <motion.div 
+                                key={notificacion.id} 
+                                className={`p-3 hover:bg-gray-800/40 transition-colors ${notificacion.read ? 'opacity-70' : ''}`}
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <Link 
+                                  to={notificacion.link || '#'} 
+                                  className="flex gap-3"
+                                  onClick={() => {
+                                    markAsRead(notificacion.id);
+                                    setNotificacionesAbiertas(false);
+                                  }}
+                                >
+                                  <div className={`${getNotificationBg(notificacion.type)} p-2 rounded-full flex-shrink-0`}>
+                                    {getNotificationIcon(notificacion.type)}
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className={`text-sm ${notificacion.read ? 'text-gray-300' : 'text-white font-medium'}`}>
+                                      {notificacion.message}
+                                    </p>
+                                    <div className="flex items-center justify-between mt-1">
+                                      <p className="text-xs text-gray-500">
+                                        {getRelativeTime(notificacion.date)}
+                                      </p>
+                                      {!notificacion.read && (
+                                        <button 
+                                          onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            markAsRead(notificacion.id);
+                                          }}
+                                          className="text-xs text-purple-400 hover:text-purple-300 flex items-center"
+                                        >
+                                          <CheckCheck size={12} className="mr-1" />
+                                          Marcar como leída
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="py-8 text-center">
+                            <div className="bg-gray-800/50 mx-auto rounded-full p-3 w-12 h-12 flex items-center justify-center mb-3">
+                              <CheckCheck size={24} className="text-green-400" />
                             </div>
-                          </motion.div>
-                        ))}
+                            <p className="text-gray-400 text-sm">No tienes notificaciones {activeFilter === 'unread' ? 'no leídas' : ''}</p>
+                          </div>
+                        )}
                       </div>
+                      
+                      {/* Footer with actions */}
+                      {filteredNotifications.length > 0 && (
+                        <div className="p-2 border-t border-gray-800/50 flex justify-center">
+                          <button 
+                            onClick={markAllAsRead}
+                            className="text-xs text-purple-400 hover:text-purple-300 flex items-center py-1.5 px-3 rounded-full hover:bg-purple-500/10 transition-colors"
+                          >
+                            <CheckCheck size={14} className="mr-1.5" />
+                            Marcar todas como leídas
+                          </button>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
               
-              {/* Botón de menú móvil mejorado */}
+              {/* Mobile Menu Button */}
               <motion.button
                 onClick={toggleMenu}
                 className="md:hidden p-2 rounded-xl bg-gray-800/70 hover:bg-gray-700/90 text-white transition-all duration-300"
@@ -243,7 +429,7 @@ function Navbar() {
           </div>
         </div>
 
-        {/* Menú móvil moderno y con mejor animación */}
+        {/* Mobile Menu - Adding YouTube button and notifications */}
         <AnimatePresence>
           {menuAbierto && (
             <motion.div 
@@ -253,8 +439,8 @@ function Navbar() {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-              <div className="px-4 py-2 space-y-1">
-                {/* Enlaces de navegación móvil */}
+              <div className="px-4 py-2 space-y-3">
+                {/* Navigation Links */}
                 {[
                   { path: '/', icon: <Home size={18} className="mr-2.5" />, label: 'Home' },
                   { path: '/episodios', icon: <Headphones size={18} className="mr-2.5" />, label: 'Episodios' },
@@ -280,63 +466,86 @@ function Navbar() {
                     </Link>
                   </motion.div>
                 ))}
-
-                {/* Separador con gradiente */}
-                <div className="my-2 relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-700/70 to-transparent"></div>
-                  </div>
-                </div>
                 
-                {/* Notificaciones móviles */}
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
+                {/* Divider */}
+                <div className="my-3 border-t border-gray-700/30"></div>
+                
+                {/* Mobile YouTube Button - Moved inside hamburger menu */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="mt-2 mb-3"
-                >
-                  <div className="flex items-center justify-between px-4 py-2">
-                    <h3 className="text-sm font-medium text-white flex items-center">
-                      <Bell size={14} className="mr-1.5 text-purple-400" />
-                      Notificaciones
-                    </h3>
-                  </div>
-                  
-                  <div className="space-y-2 mt-2">
-                    {notificaciones.map((notificacion, index) => (
-                      <motion.div 
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 + (index * 0.1) }}
-                        className="flex items-start gap-3 px-4 py-2.5 bg-blue-500/10 rounded-lg mx-2"
-                      >
-                        <div className="bg-blue-500/20 p-1.5 rounded-full">
-                          <Bell size={14} className="text-blue-400" />
-                        </div>
-                        <p className="text-sm text-gray-300">{notificacion.message}</p>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {/* YouTube Button para móvil */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="px-4 pt-2"
+                  className="px-1"
                 >
                   <a 
-                    href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ"
-                    target="_blank"
-                    rel="noopener noreferrer" 
-                    className="flex items-center justify-center w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white shadow-lg"
+                    href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white transition-all duration-300 shadow-md"
                     onClick={() => setMenuAbierto(false)}
                   >
                     <Youtube size={18} className="mr-2" />
-                    <span className="font-medium">Visita nuestro canal</span>
+                    <span className="font-medium">Visitar canal de YouTube</span>
                   </a>
+                </motion.div>
+                
+                {/* Enhanced Mobile Notifications */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-4"
+                >
+                  <div className="px-2 pt-1 pb-3">
+                    <div className="flex justify-between items-center mb-3">
+                      <h3 className="text-white text-sm font-semibold flex items-center">
+                        <Bell size={14} className="mr-2 text-purple-400" />
+                        Notificaciones
+                      </h3>
+                      
+                      {hayNotificaciones && (
+                        <button 
+                          onClick={markAllAsRead}
+                          className="text-xs text-purple-400 hover:text-purple-300 flex items-center"
+                        >
+                          <CheckCheck size={12} className="mr-1" />
+                          Marcar todas como leídas
+                        </button>
+                      )}
+                    </div>
+                    
+                    {notificaciones.filter(n => !n.read).length > 0 ? (
+                      <div className="space-y-2">
+                        {notificaciones.filter(n => !n.read).map((notificacion) => (
+                          <motion.div 
+                            key={notificacion.id}
+                            className="p-3 bg-gray-800/60 rounded-lg"
+                          >
+                            <Link 
+                              to={notificacion.link || '#'} 
+                              className="flex gap-3 items-start"
+                              onClick={() => {
+                                markAsRead(notificacion.id);
+                                setMenuAbierto(false);
+                              }}
+                            >
+                              <div className={`${getNotificationBg(notificacion.type)} p-1.5 rounded-full flex-shrink-0`}>
+                                {getNotificationIcon(notificacion.type)}
+                              </div>
+                              <div>
+                                <p className="text-sm text-gray-200">{notificacion.message}</p>
+                                <p className="text-xs text-gray-500 mt-1">{getRelativeTime(notificacion.date)}</p>
+                              </div>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center bg-gray-800/40 rounded-lg">
+                        <p className="text-gray-400 text-sm">No tienes notificaciones nuevas</p>
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               </div>
             </motion.div>
@@ -360,7 +569,6 @@ function Navbar() {
         </div>
       </header>
       
-      {/* Spacer para el header fijo */}
       <div className="h-16 sm:h-18 md:h-20"></div>
     </>
   );
