@@ -14,7 +14,7 @@ const Episode: React.FC<EpisodeProps> = ({
   id, 
   title, 
   description, 
-  duration, // This should already be the calculated duration from updateEpisodesDuration
+  duration, // We'll ignore this and always calculate
   date,
   imageUrl,
   label = [],
@@ -26,36 +26,48 @@ const Episode: React.FC<EpisodeProps> = ({
   const [calculatedDuration, setCalculatedDuration] = useState<string | null>(null);
   const [isLoadingDuration, setIsLoadingDuration] = useState(false);
 
-  // We'll skip this client-side calculation since it should have been done server-side already
-  // Only calculate if we didn't receive a duration or need to verify it
+  // Always calculate duration when component mounts if videoUrl is available
   useEffect(() => {
-    // Skip calculation if we already have a duration from parent
-    if (duration && duration !== "0:00") return;
-
-    const calculateDuration = async () => {
-      if (videoUrl) {
-        setIsLoadingDuration(true);
-        try {
-          console.log(`Calculating duration for episode ${id} in component`);
-          const audioDuration = await getAudioDuration(videoUrl);
-          console.log(`Duration calculated in component: ${audioDuration}`);
-          setCalculatedDuration(audioDuration);
-        } catch (error) {
-          console.error(`Error calculating duration for episode ${id}:`, error);
-        } finally {
-          setIsLoadingDuration(false);
+    // Try to construct a videoUrl if none was provided
+    const effectiveVideoUrl = videoUrl || `/audios/episodio${id}.mp3`;
+    
+    console.log(`Episode ${id}: Using URL for duration calculation: ${effectiveVideoUrl}`);
+    setIsLoadingDuration(true);
+    
+    getAudioDuration(effectiveVideoUrl)
+      .then(audioDuration => {
+        console.log(`Episode ${id}: Duration calculation SUCCESS: ${audioDuration}`);
+        setCalculatedDuration(audioDuration);
+      })
+      .catch(error => {
+        console.error(`Episode ${id}: Duration calculation FAILED:`, error);
+        // If calculation fails, fall back to the provided duration but don't use "0:00"
+        if (duration && duration !== "0:00") {
+          console.log(`Episode ${id}: Using fallback duration: ${duration}`);
+          setCalculatedDuration(duration);
+        } else {
+          console.log(`Episode ${id}: Using placeholder duration`);
+          setCalculatedDuration("--:--");
         }
-      }
-    };
+      })
+      .finally(() => {
+        setIsLoadingDuration(false);
+      });
+  }, [id, videoUrl]); // Keep dependency array the same
 
-    // Only calculate if videoUrl is passed (optional)
-    if (videoUrl) {
-      calculateDuration();
-    }
-  }, [id, videoUrl, duration]);
-
-  // Display the calculated duration or fall back to the provided duration
-  const displayDuration = calculatedDuration || duration;
+  // Update this line to always show some duration
+  const displayDuration = calculatedDuration || (isLoadingDuration ? "Calculando..." : (duration !== "0:00" ? duration : "--:--"));
+  
+  // Log the current state of the component for debugging
+  useEffect(() => {
+    console.log(`Episode ${id} state:`, { 
+      videoUrl: videoUrl?.substring(0, 20) + "...", 
+      originalDuration: duration,
+      calculatedDuration, 
+      displayDuration, 
+      isLoadingDuration 
+    });
+  }, [id, videoUrl, calculatedDuration, displayDuration, isLoadingDuration, duration]);
 
   // Get a color based on the label string for consistent coloring
   const getLabelColor = (label: string): string => {
@@ -121,12 +133,12 @@ const Episode: React.FC<EpisodeProps> = ({
                   <Loader size={14} className="mr-1.5 text-purple-400 animate-spin" />
                   Calculando...
                 </span>
-              ) : displayDuration ? (
+              ) : (
                 <span className="flex items-center backdrop-blur-sm bg-black/30 rounded-full px-3 py-1">
                   <Clock size={14} className="mr-1.5 text-purple-400" />
-                  {displayDuration}
+                  {displayDuration || "--:--"}
                 </span>
-              ) : null}
+              )}
               {date && (
                 <span className="flex items-center backdrop-blur-sm bg-black/30 rounded-full px-3 py-1">
                   <Calendar size={14} className="mr-1.5 text-purple-400" />
