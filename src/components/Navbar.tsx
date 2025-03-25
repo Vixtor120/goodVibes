@@ -179,20 +179,20 @@ function Navbar() {
             {/* Logo */}
             <motion.a 
               href="/" 
-              className="flex items-center gap-2 sm:gap-3 group"
+              className="flex items-center gap-0 group relative"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              <div className="flex items-center bg-gradient-to-r from-purple-700 to-purple-600 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md shadow-lg shadow-purple-900/10 group-hover:shadow-purple-600/20 transition-all duration-300">
+              <div className="flex items-center bg-gradient-to-r from-purple-700 to-purple-600 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md shadow-lg shadow-purple-900/10 group-hover:shadow-purple-600/20 transition-all duration-300 z-10">
                 <Radio size={14} className="text-white mr-1 sm:mr-1.5 animate-pulse" />
                 <span className="text-white text-xs font-bold uppercase tracking-wider">Podcast</span>
               </div>
               <motion.div 
-                className="h-auto w-28 xs:w-32 sm:w-36 md:w-40 lg:w-44 transition-all duration-300"
+                className="h-auto w-28 xs:w-32 sm:w-36 md:w-40 lg:w-44 transition-all duration-300 -ml-2 sm:-ml-3"
                 whileHover={{ x: 3 }}
               >
                 <img 
-                  src="/images/logo3_edit.png" 
+                  src="/images/logo.png" 
                   alt="GoodVibes Logo" 
                   className="h-auto w-full"
                 />
