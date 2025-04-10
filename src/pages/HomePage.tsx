@@ -276,10 +276,10 @@ const HomePage = () => {
               <div className="mt-4">
                 <Link 
                   to={`/episodios/${latestEpisode.id}`} 
-                  className="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded-lg flex items-center font-medium transition-all duration-300"
+                  className="bg-gradient-to-r from-purple-600 via-purple-500 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-1.5 rounded-full flex items-center font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-purple-500/30 transform hover:-translate-y-1 text-sm"
                 >
                   Ver detalles
-                  <ChevronRight size={18} className="ml-2" />
+                  <ChevronRight size={16} className="ml-2" />
                 </Link>
               </div>
             </div>
