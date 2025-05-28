@@ -1,0 +1,102 @@
+/* Extensión de animaciones con tema veraniego */
+@keyframes floating-summer {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes waves {
+  0% {
+    transform: translateX(-100%) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-50%) translateZ(0) scaleY(0.8);
+  }
+  100% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* Adornos veraniegos para agregar como decoración */
+.summer-bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(1px);
+  z-index: -1;
+  animation: floating-summer 6s ease-in-out infinite;
+}
+
+.summer-bubble:nth-child(odd) {
+  animation-delay: 1.5s;
+  animation-duration: 7s;
+}
+
+.summer-bubble:nth-child(even) {
+  animation-delay: 0.5s;
+  animation-duration: 8s;
+}
+
+.summer-shimmer {
+  background: linear-gradient(100deg,
+    rgba(255, 255, 255, 0) 10%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0) 40%);
+  background-size: 800px 100%;
+  animation: shimmer 2.5s infinite linear;
+}
+
+.summer-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" fill-opacity="1" d="M0,128L48,133.3C96,139,192,149,288,144C384,139,480,117,576,117.3C672,117,768,139,864,149.3C960,160,1056,160,1152,144C1248,128,1344,96,1392,80L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+  background-size: 100% 100%;
+  animation: waves 7s linear infinite;
+}
+
+/* Anulaciones para mejorar la legibilidad */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: 0.015em;
+}
+
+/* Mejoras de accesibilidad para botones y elementos interactivos */
+.button-summer-hover {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  z-index: 1;
+}
+
+.button-summer-hover:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+  z-index: -1;
+}
+
+.button-summer-hover:hover:before {
+  width: 100%;
+}

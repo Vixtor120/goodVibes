@@ -126,15 +126,13 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 max-w-6xl">
-      <motion.div 
+    <div className="container mx-auto px-4 py-16 max-w-6xl">      <motion.div 
         className="mb-12 text-center"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Contáctanos</h1>
-        <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+      >        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise drop-shadow-md">Contáctanos</h1>
+        <p className="text-white max-w-2xl mx-auto text-lg font-semibold drop-shadow-sm">
           Estamos deseando escuchar tus ideas, sugerencias o incluso darte la oportunidad de participar en nuestro podcast.
         </p>
       </motion.div>
@@ -150,9 +148,9 @@ const ContactPage = () => {
           className="md:col-span-1"
           variants={fadeInUp}
         >
-          <div className="bg-gray-800/70 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-700/50 h-full">
-            <h2 className="text-2xl font-semibold text-white mb-6 flex items-center">
-              <Headphones className="mr-2 text-purple-500" size={24} />
+          <div className="bg-summer-dark/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-summer-accent/30 h-full">
+            <h2 className="text-2xl font-semibold text-white mb-6 flex items-center drop-shadow-md">
+              <Headphones className="mr-2 text-summer-accent" size={24} />
               Good Vibes Podcast
             </h2>
             
@@ -162,7 +160,7 @@ const ContactPage = () => {
                 whileHover={{ scale: 1.02 }}
               >
                 <div className="bg-gray-700/50 p-3 rounded-full">
-                  <Mail size={20} className="text-purple-400" />
+                  <Mail size={20} className="text-summer-accent" />
                 </div>
                 <div>
                   <h3 className="text-white font-medium">Correo electrónico</h3>
@@ -175,7 +173,7 @@ const ContactPage = () => {
                 whileHover={{ scale: 1.02 }}
               >
                 <div className="bg-gray-700/50 p-3 rounded-full">
-                  <Mic size={20} className="text-purple-400" />
+                  <Mic size={20} className="text-summer-accent" />
                 </div>
                 <div>
                   <h3 className="text-white font-medium">Participa en el Podcast</h3>
@@ -184,7 +182,7 @@ const ContactPage = () => {
               </motion.div>
               
               <motion.div 
-                className="bg-gradient-to-r from-purple-800/20 to-indigo-800/20 p-6 rounded-lg border-l-4 border-purple-500 mt-8"
+                className="bg-gradient-to-r from-summer-accent/20 to-summer-turquoise/20 p-6 rounded-lg border-l-4 border-summer-accent mt-8"
                 whileHover={{ scale: 1.02 }}
               >
                 <h3 className="text-lg font-medium text-white mb-2">¿Tienes algo interesante para compartir?</h3>
@@ -200,9 +198,8 @@ const ContactPage = () => {
         <motion.div 
           className="md:col-span-2"
           variants={fadeInUp}
-        >
-          <div className="bg-gray-800/70 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-gray-700/50">
-            <h2 className="text-2xl font-semibold text-white mb-6">Envíanos un mensaje</h2>
+        >          <div className="bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-summer-accent/30 text-summer-text-dark">
+            <h2 className="text-2xl font-semibold text-summer-dark mb-6 drop-shadow-sm">Envíanos un mensaje</h2>
             
             {submitResult && (
               <motion.div 
@@ -226,19 +223,17 @@ const ContactPage = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Nombre */}
-                <motion.div variants={fadeInUp}>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1.5">
+                <motion.div variants={fadeInUp}>                  <label htmlFor="name" className="block text-sm font-bold text-summer-dark mb-1.5">
                     Nombre completo
-                  </label>
-                  <input
+                  </label><input
                     type="text"
                     id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full bg-gray-700/50 border ${
-                      errors.name ? 'border-red-500' : 'border-gray-600'
-                    } rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50`}
+                    className={`w-full bg-white border ${
+                      errors.name ? 'border-red-500' : 'border-summer-dark/30'
+                    } rounded-lg px-4 py-3 text-summer-text-dark placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-summer-accent/50 font-medium`}
                     placeholder="Tu nombre"
                   />
                   {errors.name && (
@@ -247,19 +242,17 @@ const ContactPage = () => {
                 </motion.div>
                 
                 {/* Correo electrónico */}
-                <motion.div variants={fadeInUp}>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1.5">
+                <motion.div variants={fadeInUp}>                  <label htmlFor="email" className="block text-sm font-bold text-summer-dark mb-1.5">
                     Correo electrónico
-                  </label>
-                  <input
+                  </label><input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full bg-gray-700/50 border ${
-                      errors.email ? 'border-red-500' : 'border-gray-600'
-                    } rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50`}
+                    className={`w-full bg-white border ${
+                      errors.email ? 'border-red-500' : 'border-summer-dark/30'
+                    } rounded-lg px-4 py-3 text-summer-text-dark placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-summer-accent/50 font-medium`}
                     placeholder="tu.correo@ejemplo.com"
                   />
                   {errors.email && (
@@ -269,18 +262,16 @@ const ContactPage = () => {
               </div>
               
               {/* Asunto */}
-              <motion.div variants={fadeInUp}>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-1.5">
+              <motion.div variants={fadeInUp}>                <label htmlFor="subject" className="block text-sm font-bold text-summer-dark mb-1.5">
                   Asunto
-                </label>
-                <select
+                </label><select
                   id="subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className={`w-full bg-gray-700/50 border ${
-                    errors.subject ? 'border-red-500' : 'border-gray-600'
-                  } rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50`}
+                  className={`w-full bg-white border ${
+                    errors.subject ? 'border-red-500' : 'border-summer-dark/30'
+                  } rounded-lg px-4 py-3 text-summer-text-dark focus:outline-none focus:ring-2 focus:ring-summer-accent/50 font-medium`}
                 >
                   <option value="" disabled>Selecciona un asunto</option>
                   <option value="sugerencia">Sugerencia para el podcast</option>
@@ -295,19 +286,17 @@ const ContactPage = () => {
               </motion.div>
               
               {/* Mensaje */}
-              <motion.div variants={fadeInUp}>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-1.5">
+              <motion.div variants={fadeInUp}>                <label htmlFor="message" className="block text-sm font-bold text-summer-dark mb-1.5">
                   Mensaje
-                </label>
-                <textarea
+                </label><textarea
                   id="message"
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
                   rows={5}
-                  className={`w-full bg-gray-700/50 border ${
-                    errors.message ? 'border-red-500' : 'border-gray-600'
-                  } rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50`}
+                  className={`w-full bg-white border ${
+                    errors.message ? 'border-red-500' : 'border-summer-dark/30'
+                  } rounded-lg px-4 py-3 text-summer-text-dark placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-summer-accent/50 font-medium`}
                   placeholder="Describe tu idea, sugerencia o consulta..."
                 ></textarea>
                 {errors.message && (
@@ -326,9 +315,8 @@ const ContactPage = () => {
                   name="wantParticipate"
                   checked={formData.wantParticipate}
                   onChange={handleCheckboxChange}
-                  className="h-5 w-5 bg-gray-700 border-gray-600 rounded checked:bg-purple-600 focus:ring-purple-500 focus:ring-offset-gray-800 focus:ring-2 mt-0.5"
-                />
-                <label htmlFor="wantParticipate" className="text-gray-300">
+                  className="h-5 w-5 bg-gray-100 border-summer-accent/50 rounded checked:bg-summer-accent focus:ring-summer-accent focus:ring-offset-summer-light focus:ring-2 mt-0.5"
+                />                <label htmlFor="wantParticipate" className="text-summer-dark font-medium">
                   Me gustaría participar como invitado en Good Vibes Podcast
                 </label>
               </motion.div>
@@ -340,9 +328,8 @@ const ContactPage = () => {
               >
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full md:w-auto bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                    isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-purple-500/20'
+                  disabled={isSubmitting}                  className={`w-full md:w-auto bg-gradient-to-r from-summer-accent to-summer-accent-hover hover:from-summer-accent-hover hover:to-summer-accent text-white py-3 px-6 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:shadow-lg hover:shadow-summer-accent/20'
                   }`}
                 >
                   {isSubmitting ? (

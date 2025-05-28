@@ -87,9 +87,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoplay = false }) => {
   };
 
   const progressPercentage = (currentTime / duration) * 100 || 0;
-
   return (
-    <div className="bg-gray-800 border border-gray-700/50 p-5 rounded-xl shadow-md relative overflow-hidden">
+    <div className="player-summer p-5 rounded-xl shadow-md relative overflow-hidden">
       {/* Video Element */}
       <div className="relative group">
         <video

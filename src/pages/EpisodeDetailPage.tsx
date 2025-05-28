@@ -40,14 +40,14 @@ const EpisodeDetailPage = () => {
   // Get a color based on the label string for consistent coloring
   const getLabelColor = (label: string): string => {
     const colors = [
-      'bg-purple-500/80 text-purple-100 border-purple-400',
-      'bg-blue-500/80 text-blue-100 border-blue-400',
-      'bg-green-500/80 text-green-100 border-green-400',
-      'bg-red-500/80 text-red-100 border-red-400',
-      'bg-yellow-500/80 text-yellow-100 border-yellow-400',
-      'bg-indigo-500/80 text-indigo-100 border-indigo-400',
-      'bg-pink-500/80 text-pink-100 border-pink-400',
-      'bg-teal-500/80 text-teal-100 border-teal-400'
+      'bg-summer-accent/80 text-white border-summer-accent',
+      'bg-summer-turquoise/80 text-white border-summer-turquoise',
+      'bg-summer-mint/80 text-white border-summer-mint',
+      'bg-summer-secondary/80 text-white border-summer-secondary',
+      'bg-summer-accent/60 text-white border-summer-accent/60',
+      'bg-summer-turquoise/60 text-white border-summer-turquoise/60',
+      'bg-summer-mint/60 text-white border-summer-mint/60',
+      'bg-summer-secondary/60 text-white border-summer-secondary/60'
     ];
     // Use the sum of character codes to determine a consistent color
     const sum = label.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
@@ -87,7 +87,6 @@ const EpisodeDetailPage = () => {
       },
     },
   };
-
   if (!episode) {
     return (
       <div className="container mx-auto px-4 py-16">
@@ -118,11 +117,10 @@ const EpisodeDetailPage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">{episode.title}</h1>
-        <div className="flex flex-wrap items-center text-sm text-gray-400 gap-4 mb-6">
+      >        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise">{episode.title}</h1>
+        <div className="flex flex-wrap items-center text-sm text-white gap-4 mb-6">
           <span className="flex items-center">
-            <Calendar size={16} className="mr-1 text-purple-400" /> 
+            <Calendar size={16} className="mr-1 text-summer-accent" /> 
             {episode.date}
           </span>
           <span className="flex items-center">
@@ -219,23 +217,21 @@ const EpisodeDetailPage = () => {
             )}
           </motion.div>
           
-          {/* Description */}
-          <motion.div 
-            className="bg-gray-800 rounded-xl p-6 mb-6"
+          {/* Description */}          <motion.div 
+            className="bg-white/90 rounded-xl p-6 mb-6 shadow-lg border border-summer-accent/20"
             variants={fadeInUp}
           >
-            <h2 className="text-xl font-semibold text-white mb-4">Descripción del episodio</h2>
-            <p className="text-gray-300 leading-relaxed">{episode.description}</p>
+            <h2 className="text-xl font-semibold text-summer-text-dark mb-4 border-b border-summer-accent/30 pb-2">Descripción del episodio</h2>
+            <p className="text-summer-text-medium leading-relaxed font-medium">{episode.description}</p>
           </motion.div>
           
-          {/* Share Section */}
-          <motion.div 
-            className="flex flex-wrap gap-4 justify-between items-center bg-gray-800/60 p-4 rounded-xl"
+          {/* Share Section */}          <motion.div 
+            className="flex flex-wrap gap-4 justify-between items-center bg-summer-dark/80 p-4 rounded-xl border border-summer-accent/30"
             variants={fadeInUp}
           >
             <div className="flex items-center">
               <motion.button 
-                className="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg flex items-center transition-all duration-300 relative"
+                className="bg-gradient-to-r from-summer-accent to-summer-accent-hover hover:from-summer-accent-hover hover:to-summer-accent text-white px-4 py-2 rounded-lg flex items-center transition-all duration-300 relative font-medium"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleShare}
@@ -256,16 +252,15 @@ const EpisodeDetailPage = () => {
         <motion.div 
           className="md:col-span-1"
           variants={fadeInUp}
-        >
-          <div className="bg-gray-800 rounded-xl p-6 sticky top-24">
-            <h3 className="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Más episodios</h3>
+        >          <div className="bg-white/90 rounded-xl p-6 sticky top-24 border border-summer-accent/20 shadow-lg">
+            <h3 className="text-lg font-semibold text-summer-text-dark mb-4 border-b border-summer-accent/30 pb-2">Más episodios</h3>
             
             <div className="space-y-4">
               {episodesData.filter(ep => ep.id !== parseInt(id || '', 10)).slice(0, 3).map((ep, index) => (
                 <motion.a 
                   key={ep.id} 
                   href={`/episodios/${ep.id}`}
-                  className="flex items-start space-x-3 group"
+                  className="flex items-start space-x-3 group hover:bg-summer-accent/10 p-2 rounded-lg transition-all"
                   variants={fadeInUp}
                   custom={index}
                   transition={{ delay: index * 0.1 }}
@@ -275,9 +270,8 @@ const EpisodeDetailPage = () => {
                     alt={ep.title}
                     className="w-16 h-16 object-cover rounded-lg group-hover:brightness-110 transition-all" 
                   />
-                  <div>
-                    <h4 className="text-white font-medium line-clamp-2 group-hover:text-purple-400 transition-colors">{ep.title}</h4>
-                    <p className="text-xs text-gray-400">{ep.date}</p>
+                  <div>                  <h4 className="text-summer-text-dark font-medium line-clamp-2 group-hover:text-summer-accent transition-colors">{ep.title}</h4>
+                    <p className="text-xs text-summer-text-medium font-medium">{ep.date}</p>
                   </div>
                 </motion.a>
               ))}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Home, Headphones, Mail, Radio, Youtube, Settings } from 'lucide-react';
+import { Menu, X, Home, Headphones, Mail, Radio, Youtube, Settings, Linkedin, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Navbar() {
@@ -25,67 +25,76 @@ function Navbar() {
 
   function toggleMenu() {
     setMenuAbierto(!menuAbierto);
-  }
-
-  return (
+  }  return (
     <>
-      <header className={`fixed w-full z-50 transition-all duration-300 ${
+      <header className={`fixed w-full top-0 z-50 transition-all duration-300 navbar-summer ${
         scrollActivo 
-          ? "bg-black/90 backdrop-blur-md shadow-md shadow-purple-900/10" 
+          ? "bg-summer-dark/70 backdrop-blur-md shadow-md shadow-summer-shadow-sm" 
           : menuAbierto 
-            ? "bg-black/80 backdrop-blur-sm" 
-            : "bg-transparent"
+            ? "bg-summer-dark/60 backdrop-blur-sm" 
+            : "bg-summer-dark/40 backdrop-blur-sm"
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-16 sm:h-18 md:h-20">
-            {/* Logo */}
-            <motion.a 
-              href="/" 
-              className="flex items-center gap-0 group relative"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="flex items-center bg-gradient-to-r from-purple-700 to-purple-600 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md shadow-lg shadow-purple-900/10 group-hover:shadow-purple-600/20 transition-all duration-300 z-10">
-                <Radio size={14} className="text-white mr-1 sm:mr-1.5 animate-pulse" />
-                <span className="text-white text-xs font-bold uppercase tracking-wider">Podcast</span>
-              </div>
-              <motion.div 
-                className="h-auto w-28 xs:w-32 sm:w-36 md:w-40 lg:w-44 transition-all duration-300 -ml-2 sm:-ml-3"
-                whileHover={{ x: 3 }}
+        <div className="relative">
+          <motion.div 
+            className="h-[1px] bg-gradient-to-r from-yellow-400/10 via-yellow-400/60 to-yellow-400/10"
+            animate={{ 
+              backgroundPosition: ['0% 50%', '100% 50%'],
+            }}
+            transition={{ 
+              duration: 12, 
+              repeat: Infinity,
+              repeatType: "mirror" 
+            }}
+            style={{ backgroundSize: '200% 100%' }}
+          ></motion.div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between h-16 sm:h-18 md:h-20">
+              {/* Logo */}
+              <motion.a 
+                href="/" 
+                className="flex items-center gap-0 group relative"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                <img 
-                  src="/images/logo.png" 
-                  alt="GoodVibes Logo" 
-                  className="h-auto w-full"
-                />
-              </motion.div>
-            </motion.a>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-1 lg:space-x-3">
-              {[
-                { path: '/', icon: <Home size={16} className="mr-1.5" />, label: 'Home' },
-                { path: '/episodios', icon: <Headphones size={16} className="mr-1.5" />, label: 'Episodios' },
-                { path: '/produccion', icon: <Settings size={16} className="mr-1.5" />, label: 'Producción' },
-                { path: '/contacto', icon: <Mail size={16} className="mr-1.5" />, label: 'Contacto' }
-              ].map((item) => (
-                <motion.div
-                  key={item.path}
-                  whileHover={{ y: -2 }}
+                <div className="flex items-center bg-gradient-to-r from-yellow-400 to-yellow-500 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-md shadow-lg shadow-yellow-400/20 group-hover:shadow-yellow-400/30 transition-all duration-300 z-10">
+                  <Radio size={14} className="text-summer-dark mr-1 sm:mr-1.5 animate-pulse" />
+                  <span className="text-summer-dark text-xs font-bold uppercase tracking-wider">Podcast</span>
+                </div>
+                <motion.div 
+                  className="h-auto w-28 xs:w-32 sm:w-36 md:w-40 lg:w-44 transition-all duration-300 -ml-2 sm:-ml-3"
+                  whileHover={{ x: 3 }}
                 >
+                  <img 
+                    src="/images/logo.png" 
+                    alt="GoodVibes Logo" 
+                    className="h-auto w-full"
+                  />
+                </motion.div>
+              </motion.a>
+
+              {/* Desktop Navigation */}
+              <nav className="hidden md:flex space-x-1 lg:space-x-3">
+                { [
+                  { path: '/', icon: <Home size={16} className="mr-1.5" />, label: 'Home' },
+                  { path: '/episodios', icon: <Headphones size={16} className="mr-1.5" />, label: 'Episodios' },
+                  { path: '/produccion', icon: <Settings size={16} className="mr-1.5" />, label: 'Producción' },
+                  { path: '/contacto', icon: <Mail size={16} className="mr-1.5" />, label: 'Contacto' }
+                ].map((item) => (
+                  <motion.div
+                    key={item.path}
+                    whileHover={{ y: -2 }}                  >
                   <Link 
                     to={item.path} 
                     className={`group flex flex-col items-center px-3 py-2 rounded-xl transition-all duration-300 relative ${
                       location.pathname === item.path 
-                        ? 'text-white bg-gradient-to-br from-purple-900/40 to-purple-800/20' 
-                        : 'text-gray-300 hover:text-white hover:bg-gray-800/30'
+                        ? 'text-yellow-400 bg-gradient-to-br from-yellow-400/20 to-yellow-500/10' 
+                        : 'text-gray-300 hover:text-yellow-400 hover:bg-gray-800/30'
                     }`}
-                  >
-                    <div className="flex items-center">
+                  >                    <div className="flex items-center">
                       {item.icon} 
                       <span className="text-sm whitespace-nowrap">{item.label}</span>
                     </div>
-                    <div className={`h-0.5 bg-gradient-to-r from-purple-500 to-purple-400 mt-1 transition-all duration-300 rounded-full ${
+                    <div className={`h-0.5 bg-gradient-to-r from-yellow-400 to-yellow-500 mt-1 transition-all duration-300 rounded-full ${
                       location.pathname === item.path ? 'w-4/5' : 'w-0 group-hover:w-4/5'
                     }`}></div>
                   </Link>
@@ -95,69 +104,83 @@ function Navbar() {
 
             {/* Right-side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3">
-              {/* YouTube Button - Large screens */}
-              <motion.div 
-                className="hidden lg:block"
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
-              >
-                <a 
-                  href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 px-3 py-1.5 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-red-700/20 group"
+              {/* YouTube Button - Large screens */}              <div className="hidden lg:flex items-center space-x-2">
+                <motion.div 
+                  whileHover={{ y: -2 }}
+                  whileTap={{ y: 0 }}
                 >
-                  <Youtube size={16} className="text-white mr-1.5 group-hover:animate-pulse" />
-                  <span className="text-xs sm:text-sm font-medium whitespace-nowrap">YouTube</span>
-                </a>
-              </motion.div>
-              
-              {/* YouTube icon only for Medium screens */}
-              <motion.div
-                className="hidden sm:block lg:hidden"
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
-              >
-                <a 
-                  href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center p-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 rounded-xl text-white transition-all duration-300 shadow-md"
+                  <a 
+                    href="https://www.instagram.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 p-2 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-pink-500/20 group"
+                  >
+                    <Instagram size={20} className="text-white group-hover:animate-pulse" />
+                  </a>
+                </motion.div>
+
+                <motion.div 
+                  whileHover={{ y: -2 }}
+                  whileTap={{ y: 0 }}
                 >
-                  <Youtube size={18} />
-                </a>
-              </motion.div>
-              
+                  <a 
+                    href="https://www.linkedin.com/in/vichidsan/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 p-2 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-blue-600/20 group"
+                  >
+                    <Linkedin size={20} className="text-white group-hover:animate-pulse" />
+                  </a>
+                </motion.div>
+
+                <motion.div 
+                  whileHover={{ y: -2 }}
+                  whileTap={{ y: 0 }}
+                >
+                  <a 
+                    href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 p-2 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-red-700/20 group"
+                  >
+                    <Youtube size={20} className="text-white group-hover:animate-pulse" />
+                  </a>
+                </motion.div>
+              </div>
+
               {/* Mobile Menu Button */}
-              <motion.button
-                onClick={toggleMenu}
-                className="md:hidden p-2 rounded-xl bg-gray-800/70 hover:bg-gray-700/90 text-white transition-all duration-300"
-                whileTap={{ scale: 0.9 }}
-              >
-                <AnimatePresence mode="wait">
-                  {menuAbierto ? (
-                    <motion.div
-                      key="close"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <X size={20} />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="menu"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: -90, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Menu size={20} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.button>
+              <div className="flex md:hidden">
+                <motion.button 
+                  className="text-white p-1.5 rounded-lg hover:bg-gray-700/50 transition-colors relative focus:outline-none"
+                  onClick={() => setMenuAbierto(!menuAbierto)}
+                  aria-expanded={menuAbierto}
+                  aria-label="Menu principal"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <AnimatePresence>
+                    {!menuAbierto ? (
+                      <motion.div
+                        key="menu-cerrado"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                      >
+                        <Menu className="w-6 h-6" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="menu-abierto"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                      >
+                        <X className="w-6 h-6" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              </div>
             </div>
           </div>
         </div>
@@ -190,56 +213,66 @@ function Navbar() {
                       to={item.path} 
                       className={`flex items-center py-3 px-4 rounded-xl transition-all duration-300 ${
                         location.pathname === item.path 
-                          ? 'text-white bg-gradient-to-r from-purple-800/70 to-purple-700/70' 
-                          : 'text-gray-300 hover:bg-gray-800/50 hover:text-white'
+                          ? 'bg-yellow-400/20 text-yellow-400' 
+                          : 'text-gray-300 hover:bg-yellow-400/10 hover:text-yellow-400'
                       }`}
                       onClick={() => setMenuAbierto(false)}
                     >
-                      {item.icon} <span className="text-base">{item.label}</span>
+                      {item.icon}
+                      <span>{item.label}</span>
                     </Link>
                   </motion.div>
                 ))}
-                
-                {/* Divider */}
-                <div className="my-3 border-t border-gray-700/30"></div>
-                
-                {/* Mobile YouTube Button */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 }}
-                  className="px-1"
-                >
-                  <a 
-                    href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full py-3 px-4 rounded-xl bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white transition-all duration-300 shadow-md"
-                    onClick={() => setMenuAbierto(false)}
+
+                {/* YouTube Button - Mobile */}                <div className="flex items-center space-x-2">
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 }}
                   >
-                    <Youtube size={18} className="mr-2" />
-                    <span className="font-medium">Visitar canal de YouTube</span>
-                  </a>
-                </motion.div>
+                    <a 
+                      href="https://www.instagram.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center p-3 rounded-xl bg-gradient-to-r from-pink-500/90 to-purple-500/90 text-white hover:from-pink-600/90 hover:to-purple-600/90 transition-all duration-300"
+                    >
+                      <Instagram size={20} className="animate-pulse" />
+                    </a>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <a 
+                      href="https://www.linkedin.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center p-3 rounded-xl bg-gradient-to-r from-blue-600/90 to-blue-700/90 text-white hover:from-blue-500/90 hover:to-blue-600/90 transition-all duration-300"
+                    >
+                      <Linkedin size={20} className="animate-pulse" />
+                    </a>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <a 
+                      href="https://www.youtube.com/channel/UCiDrxNOf4aqtrDlkUmeKaZQ" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center p-3 rounded-xl bg-gradient-to-r from-red-600/90 to-red-700/90 text-white hover:from-red-500/90 hover:to-red-600/90 transition-all duration-300"
+                    >
+                      <Youtube size={20} className="animate-pulse" />
+                    </a>
+                  </motion.div>
+                </div>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
-        
-        {/* Línea inferior con animación */}
-        <div className="w-full">
-          <motion.div 
-            className="h-[1px] bg-gradient-to-r from-purple-500/10 via-purple-500/60 to-purple-500/10"
-            animate={{ 
-              backgroundPosition: ['0% 50%', '100% 50%'],
-            }}
-            transition={{ 
-              duration: 12, 
-              repeat: Infinity,
-              repeatType: "mirror" 
-            }}
-            style={{ backgroundSize: '200% 100%' }}
-          ></motion.div>
+          )}        </AnimatePresence>
         </div>
       </header>
       

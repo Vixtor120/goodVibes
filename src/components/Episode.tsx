@@ -72,14 +72,10 @@ const Episode: React.FC<EpisodeProps> = ({
   // Get a color based on the label string for consistent coloring
   const getLabelColor = (label: string): string => {
     const colors = [
-      'bg-gradient-to-r from-purple-600/70 to-purple-500/70 text-white',
-      'bg-gradient-to-r from-blue-600/70 to-blue-500/70 text-white',
-      'bg-gradient-to-r from-green-600/70 to-green-500/70 text-white',
-      'bg-gradient-to-r from-red-600/70 to-red-500/70 text-white',
-      'bg-gradient-to-r from-yellow-600/70 to-yellow-500/70 text-white',
-      'bg-gradient-to-r from-indigo-600/70 to-indigo-500/70 text-white',
-      'bg-gradient-to-r from-pink-600/70 to-pink-500/70 text-white',
-      'bg-gradient-to-r from-teal-600/70 to-teal-500/70 text-white'
+      'bg-gradient-to-r from-summer-secondary/90 to-summer-secondary/70 text-summer-dark',
+      'bg-gradient-to-r from-summer-secondary/80 to-summer-secondary/60 text-summer-dark',
+      'bg-gradient-to-r from-summer-secondary/70 to-summer-secondary/50 text-summer-dark',
+      'bg-gradient-to-r from-summer-secondary/60 to-summer-secondary/40 text-summer-dark'
     ];
     // Use the sum of character codes to determine a consistent color
     const sum = label.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
@@ -99,15 +95,14 @@ const Episode: React.FC<EpisodeProps> = ({
       setShowShareFeedback(true);
       setTimeout(() => setShowShareFeedback(false), 2000);
     }
-  };
-
-  return (
+  };  return (
     <div 
-      className="backdrop-blur-sm bg-gray-900/80 rounded-2xl overflow-hidden h-[460px] shadow-lg hover:shadow-purple-500/20 transition-all duration-300 flex flex-col border border-gray-700/30"
+      className="card-summer rounded-2xl overflow-hidden h-[460px] shadow-lg transition-all duration-300 flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
-        background: 'linear-gradient(145deg, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.95))',
+        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.9))',
+        boxShadow: '0 8px 20px rgba(0, 52, 89, 0.15)'
       }}
     >
       <div className="relative h-[200px] overflow-hidden">
@@ -124,34 +119,27 @@ const Episode: React.FC<EpisodeProps> = ({
           style={{
             background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.1) 100%)'
           }}
-        >
-          <div className="p-6 w-full">
-            <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 drop-shadow-md">{title}</h3>
-            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-200">
-              {isLoadingDuration ? (
-                <span className="flex items-center backdrop-blur-sm bg-black/30 rounded-full px-3 py-1">
-                  <Loader size={14} className="mr-1.5 text-purple-400 animate-spin" />
+        >          <div className="p-6 w-full">
+            <h3 className="text-xl font-bold text-summer-dark mb-2 line-clamp-2">{title}</h3>            <div className="flex flex-wrap items-center gap-2 text-sm text-summer-dark">
+              {isLoadingDuration ? (                <span className="flex items-center bg-white/80 backdrop-blur-sm rounded-full px-3 py-1">                  <Loader size={14} className="mr-1.5 text-summer-accent animate-spin" />
                   Calculando...
                 </span>
-              ) : (
-                <span className="flex items-center backdrop-blur-sm bg-black/30 rounded-full px-3 py-1">
-                  <Clock size={14} className="mr-1.5 text-purple-400" />
+              ) : (                <span className="flex items-center bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-summer-dark">
+                  <Clock size={14} className="mr-1.5 text-summer-accent" />
                   {displayDuration || "--:--"}
                 </span>
               )}
-              {date && (
-                <span className="flex items-center backdrop-blur-sm bg-black/30 rounded-full px-3 py-1">
-                  <Calendar size={14} className="mr-1.5 text-purple-400" />
+              {date && (                <span className="flex items-center bg-white/80 backdrop-blur-sm rounded-full px-3 py-1 text-summer-dark">
+                  <Calendar size={14} className="mr-1.5 text-summer-accent" />
                   {date}
                 </span>
               )}
             </div>
           </div>
         </div>
-        <div className="absolute top-4 right-4 z-10">
-          <button 
+        <div className="absolute top-4 right-4 z-10">          <button 
             aria-label="Play episode" 
-            className={`bg-gradient-to-br from-purple-600 to-indigo-600 text-white p-3 rounded-full transition-all hover:shadow-lg hover:shadow-purple-500/30 ${isHovered ? 'scale-110' : 'scale-100'}`}
+            className={`bg-gradient-to-br from-summer-secondary to-summer-secondary/80 text-summer-dark p-3 rounded-full transition-all hover:shadow-lg hover:shadow-summer-secondary/30 ${isHovered ? 'scale-110' : 'scale-100'}`}
             onClick={handlePlay}
             title="Reproducir episodio"
             style={{ transition: 'transform 0.3s ease' }}
@@ -173,24 +161,21 @@ const Episode: React.FC<EpisodeProps> = ({
               </span>
             ))}
           </div>
-        )}
-        <p className="text-gray-300 text-sm line-clamp-3 leading-relaxed flex-grow">{description}</p>
-        <div className="flex justify-between items-center pt-4 mt-auto border-t border-gray-700/30">
+        )}        <p className="text-summer-dark text-sm line-clamp-3 leading-relaxed flex-grow font-medium">{description}</p>        <div className="flex justify-between items-center pt-4 mt-auto border-t border-summer-secondary/20">
           <Link 
             to={`/episodios/${id}`} 
-            className="text-purple-400 hover:text-purple-300 transition-all duration-300 text-sm font-medium flex items-center group"
+            className="text-summer-secondary hover:text-summer-secondary/80 transition-all duration-300 text-sm font-bold flex items-center group"
           >
             Ver detalles
             <ChevronRight size={16} className="ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
           </Link>
           <button 
-            className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-purple-500/10 transition-all duration-300 relative"
+            className="text-summer-dark hover:text-summer-secondary p-2 rounded-full hover:bg-summer-secondary/10 transition-all duration-300 relative"
             onClick={handleShare}
             title="Compartir episodio"
           >
             <Share2 size={17} />
-            {showShareFeedback && (
-              <span className="absolute -top-9 -left-12 bg-black/80 backdrop-blur-md text-white text-xs py-1.5 px-3 rounded-md whitespace-nowrap z-10 shadow-md border border-gray-700/30">
+            {showShareFeedback && (              <span className="absolute -top-9 -left-12 bg-black/80 backdrop-blur-md text-white text-xs py-1.5 px-3 rounded-md whitespace-nowrap z-10 shadow-md border border-black/30">
                 {'share' in navigator ? '¡Compartido!' : '¡Enlace copiado!'}
               </span>
             )}

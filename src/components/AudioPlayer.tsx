@@ -150,30 +150,28 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
       audio.removeEventListener('pause', handlePause);
     };
   }, [onPlayStateChange]);
-
   return (
-    <div className="bg-gray-800 border border-gray-700/50 p-5 rounded-xl shadow-md relative overflow-hidden">
+    <div className="player-summer p-5 rounded-xl shadow-md relative overflow-hidden">
       {/* Progress Bar - Simplified and elegant */}
       <div className="relative mt-1 mb-5">
-        <div className="flex items-center justify-between text-xs font-medium text-gray-400 mb-1.5">
+        <div className="flex items-center justify-between text-xs font-medium text-summer-dark mb-1.5">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
         
-        <div className="relative h-1.5 bg-gray-700 rounded-full overflow-hidden group">
-          <div 
+        <div className="relative h-1.5 progress-summer rounded-full overflow-hidden group">          <div 
             ref={progressBarRef}
-            className="absolute h-full bg-gradient-to-r from-indigo-500 to-purple-400"
+            className="absolute h-full bg-gradient-to-r from-summer-turquoise to-summer-secondary"
             style={{ width: `${progressPercentage}%` }}
           ></div>
           
           {/* Minimalist progress handle */}
           <div 
-            className="absolute h-3 w-3 bg-white rounded-full shadow-sm top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
+            className="absolute h-3 w-3 bg-summer-secondary rounded-full shadow-sm top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
             style={{ 
               left: `${progressPercentage}%`, 
               transform: `translateX(-50%) translateY(-50%)`,
-              boxShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
+              boxShadow: '0 0 5px rgba(255, 209, 102, 0.5)'
             }}
           ></div>
           
@@ -200,11 +198,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
           onClick={togglePlayPause}
           className="focus:outline-none transition-all duration-300 hover:scale-105 transform"
           aria-label={isPlaying ? "Pause" : "Play"}
-        >
-          <div className={`flex items-center justify-center w-12 h-12 rounded-full ${
+        >          <div className={`flex items-center justify-center w-12 h-12 rounded-full ${
             isPlaying 
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500' 
-              : 'bg-purple-600 text-white hover:bg-purple-500'
+              ? 'bg-summer-secondary text-summer-dark hover:bg-summer-secondary/90' 
+              : 'bg-summer-secondary text-summer-dark hover:bg-summer-secondary/90'
           } shadow-md transition-all duration-300`}>
             {isPlaying ? 
               <Pause size={20} /> : 
@@ -214,17 +211,16 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
         </button>
 
         {/* Volume Control - Sleek and minimal */}
-        <div className="flex items-center space-x-2 bg-gray-700/70 px-3 py-1.5 rounded-full">
-          <button 
+        <div className="flex items-center space-x-2 bg-gray-700/70 px-3 py-1.5 rounded-full">          <button 
             onClick={() => setVolume(volume > 0 ? 0 : 1)}
-            className="text-gray-300 hover:text-white transition-colors"
+            className="text-black hover:text-summer-dark transition-colors"
             aria-label={volume > 0 ? "Mute" : "Unmute"}
           >
             {volume > 0 ? <Volume2 size={16} /> : <VolumeX size={16} />}
           </button>
           <div className="relative w-20 h-1 bg-gray-600 rounded-full overflow-hidden group">
             <div 
-              className="h-full bg-purple-500"
+              className="h-full bg-summer-secondary"
               style={{ width: `${volume * 100}%` }}
             ></div>
             

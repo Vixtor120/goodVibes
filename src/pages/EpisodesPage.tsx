@@ -100,12 +100,11 @@ const EpisodesPage = () => {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-      >
-        <h1 className="text-4xl font-bold text-white mb-3 bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-purple-600">
+      >        <h1 className="text-4xl font-bold text-white mb-3 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise">
           Nuestros Episodios
         </h1>
         <motion.p 
-          className="text-gray-300 max-w-2xl mx-auto text-lg"
+          className="text-white max-w-2xl mx-auto text-lg"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -122,8 +121,8 @@ const EpisodesPage = () => {
             animate={{ opacity: 1 }}
             className="flex flex-col items-center"
           >
-            <Loader className="w-10 h-10 text-purple-500 animate-spin mb-4" />
-            <p className="text-gray-300">Calculando duración de los episodios...</p>
+            <Loader className="w-10 h-10 text-summer-accent animate-spin mb-4" />
+            <p className="text-white">Calculando duración de los episodios...</p>
           </motion.div>
         </div>
       ) : (
@@ -137,30 +136,26 @@ const EpisodesPage = () => {
           >
             <div className="relative">
               <button 
-                onClick={() => setShowTagFilter(!showTagFilter)}
-                className={`flex items-center justify-between w-full py-4 px-5 rounded-xl shadow-md transition-all ${
-                  selectedTag 
-                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/50' 
-                    : 'bg-gray-800/70 text-gray-200 border border-gray-700/50 hover:border-purple-500/30'
+                onClick={() => setShowTagFilter(!showTagFilter)}                className={`flex items-center justify-between w-full py-4 px-5 rounded-xl shadow-md transition-all ${                selectedTag 
+                    ? 'bg-summer-dark text-white border border-summer-accent/70' 
+                    : 'bg-white/90 text-summer-text-dark border border-summer-accent/30 hover:border-summer-accent/50 font-medium'
                 }`}
               >
                 <div className="flex items-center">
-                  <Filter size={20} className={`mr-3 ${selectedTag ? 'text-purple-400' : 'text-gray-400'}`} />
+                  <Filter size={20} className={`mr-3 ${selectedTag ? 'text-summer-accent' : 'text-summer-dark/70'}`} />
                   <span className="text-lg">{selectedTag || 'Filtrar por tema'}</span>
-                </div>
-                <motion.div
+                </div>                <motion.div
                   animate={{ rotate: showTagFilter ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <ChevronDown size={20} className="text-gray-400" />
+                  <ChevronDown size={20} className="text-black" />
                 </motion.div>
               </button>
               
               {/* Tag Filter Dropdown */}
               <AnimatePresence>
-                {showTagFilter && (
-                  <motion.div 
-                    className="absolute z-20 mt-2 w-full bg-gray-800/95 backdrop-blur-xl border border-gray-700/50 rounded-xl shadow-xl overflow-hidden"
+                {showTagFilter && (                  <motion.div 
+                    className="absolute z-20 mt-2 w-full bg-summer-dark/95 backdrop-blur-xl border border-summer-accent/30 rounded-xl shadow-xl overflow-hidden"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -169,7 +164,7 @@ const EpisodesPage = () => {
                     <div className="max-h-[300px] overflow-y-auto py-1 divide-y divide-gray-700/30">
                       <button 
                         onClick={() => handleTagFilter(null)}
-                        className="w-full px-5 py-3 text-left text-gray-200 hover:bg-purple-600/20 transition-colors flex items-center"
+                        className="w-full px-5 py-3 text-left text-white font-medium hover:bg-summer-accent/20 transition-colors flex items-center"
                       >
                         <span className="w-4 h-4 mr-3 rounded-full border-2 border-gray-500 flex items-center justify-center">
                           {!selectedTag && <span className="w-2 h-2 bg-purple-500 rounded-full"></span>}
@@ -180,11 +175,10 @@ const EpisodesPage = () => {
                       {allTags.map((tag, index) => (
                         <motion.button 
                           key={tag}
-                          onClick={() => handleTagFilter(tag)}
-                          className={`w-full px-5 py-3 text-left transition-colors flex items-center ${
+                          onClick={() => handleTagFilter(tag)}                          className={`w-full px-5 py-3 text-left transition-colors flex items-center ${
                             selectedTag === tag 
-                              ? 'bg-purple-600/30 text-white' 
-                              : 'text-gray-200 hover:bg-purple-600/20'
+                              ? 'bg-summer-accent/30 text-white font-medium' 
+                              : 'text-white hover:bg-summer-accent/20 font-medium'
                           }`}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -210,7 +204,7 @@ const EpisodesPage = () => {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4 }}
               >
-                <div className="bg-purple-600/20 text-purple-300 rounded-full px-4 py-1 text-sm flex items-center">
+                <div className="bg-summer-accent/20 text-summer-accent rounded-full px-4 py-1 text-sm flex items-center">
                   <span>Filtrando: <span className="font-medium">{selectedTag}</span></span>
                   <button 
                     onClick={() => setSelectedTag(null)}
@@ -224,9 +218,8 @@ const EpisodesPage = () => {
               </motion.div>
             )}
             
-            {/* Results Count */}
-            <motion.div 
-              className="mt-3 text-center text-gray-400 text-sm"
+            {/* Results Count */}            <motion.div 
+              className="mt-3 text-center text-black text-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.1 }}
@@ -244,10 +237,9 @@ const EpisodesPage = () => {
               transition={{ duration: 0.5 }}
             >
               <div className="inline-block p-4 bg-gray-700/30 rounded-full mb-5">
-                <Filter className="h-8 w-8 text-purple-400" />
-              </div>
-              <h3 className="text-2xl font-semibold text-white mb-3">No se encontraron episodios</h3>
-              <p className="text-gray-300 max-w-lg mx-auto mb-6">
+                <Filter className="h-8 w-8 text-summer-accent" />
+              </div>              <h3 className="text-2xl font-semibold text-white mb-3">No se encontraron episodios</h3>
+              <p className="text-black max-w-lg mx-auto mb-6">
                 No hay episodios que coincidan con el tema seleccionado. Prueba con otro tema o explora todos nuestros episodios.
               </p>
               <button 
@@ -321,13 +313,12 @@ const EpisodesPage = () => {
                     
                     <div className="p-8 flex flex-col justify-between">
                       <div>
-                        <span className="bg-gradient-to-r from-purple-600/20 to-purple-600/30 text-purple-300 text-xs px-3 py-1 rounded-full mb-3 inline-block">
+                        <span className="bg-gradient-to-r from-summer-accent/20 to-summer-accent/30 text-summer-accent text-xs px-3 py-1 rounded-full mb-3 inline-block">
                           {new Date(latestEpisode.date).toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric'})}
                         </span>
-                        <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3 leading-tight">{latestEpisode.title}</h3>
-                        <div className="flex items-center text-sm text-gray-400 mb-4">
+                        <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3 leading-tight">{latestEpisode.title}</h3>                        <div className="flex items-center text-sm text-black mb-4">
                           <span className="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-summer-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             {latestEpisode.duration}
@@ -340,7 +331,7 @@ const EpisodesPage = () => {
                             {latestEpisode.label.map((tag: string, index: number) => {
                               // Generate tag colors
                               const colors = [
-                                'bg-purple-500/70 text-purple-100',
+                                'bg-summer-accent/70 text-white',
                                 'bg-blue-500/70 text-blue-100',
                                 'bg-green-500/70 text-green-100',
                                 'bg-red-500/70 text-red-100',
@@ -366,7 +357,7 @@ const EpisodesPage = () => {
                           </div>
                         )}
                         
-                        <p className="text-gray-300 leading-relaxed line-clamp-3 md:line-clamp-4">{latestEpisode.description}</p>
+                        <p className="text-black leading-relaxed line-clamp-3 md:line-clamp-4">{latestEpisode.description}</p>
                       </div>
                       
                       <div className="mt-8 hidden md:block">
@@ -397,7 +388,7 @@ const EpisodesPage = () => {
             >
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 flex items-center">
                 {selectedTag ? (
-                  <span>Más episodios de <span className="text-purple-400">{selectedTag}</span></span>
+                  <span>Más episodios de <span className="text-summer-accent">{selectedTag}</span></span>
                 ) : (
                   'Episodios anteriores'
                 )}

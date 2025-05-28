@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react"
 import './App.css';
+import './styles/summerTheme.css'; // Importamos los estilos de verano
+import './styles/summerAnimations.css'; // Importamos las animaciones veraniegas
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -15,8 +17,7 @@ function App() {
   
   return (
     <Router>
-      <ScrollToTop /> {/* Este componente resuelve el problema de scroll */}
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black flex flex-col">
+      <ScrollToTop /> {/* Este componente resuelve el problema de scroll */}      <div className="min-h-screen bg-gradient-summer flex flex-col">
         <Navbar />
         <main className="flex-grow">
           <Routes>

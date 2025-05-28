@@ -11,18 +11,17 @@ const LicensePage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="flex justify-center mb-4">
-          <Copyright size={40} className="text-purple-500" />
+        <div className="flex justify-center mb-4">          <Copyright size={40} className="text-summer-accent" />
         </div>
-        <h1 className="text-4xl font-bold text-white mb-4">Licencias Creative Commons</h1>
-        <p className="text-gray-300 max-w-2xl mx-auto">
+        <h1 className="text-4xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise">Licencias Creative Commons</h1>
+        <p className="text-white max-w-2xl mx-auto">
           Información sobre las licencias aplicadas a nuestro contenido
         </p>
       </motion.div>
 
       {/* Explicación simplificada */}
       <motion.div 
-        className="mb-10 bg-gray-800/50 rounded-xl p-6 border border-gray-700/50"
+        className="mb-10 bg-white/80 rounded-xl p-6 border border-summer-accent/30 text-summer-dark"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
