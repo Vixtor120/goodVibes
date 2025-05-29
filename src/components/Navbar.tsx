@@ -23,9 +23,7 @@ function Navbar() {
     setMenuAbierto(false);
   }, [location.pathname]);
 
-  function toggleMenu() {
-    setMenuAbierto(!menuAbierto);
-  }  return (
+  return (
     <>
       <header className={`fixed w-full top-0 z-50 transition-all duration-300 navbar-summer ${
         scrollActivo 
