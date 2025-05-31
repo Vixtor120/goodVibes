@@ -1,4 +1,10 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "master": false,
+      "main": true
+    }
+  },
   "routes": [
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
