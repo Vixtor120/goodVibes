@@ -191,11 +191,9 @@ function Navbar() {
               transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <div className="px-4 py-2 space-y-3">
-                {/* Navigation Links */}
-                {[
+                {/* Navigation Links */}                {[
                   { path: '/', icon: <Home size={18} className="mr-2.5" />, label: 'Home' },
                   { path: '/episodios', icon: <Headphones size={18} className="mr-2.5" />, label: 'Episodios' },
-                  { path: '/produccion', icon: <Settings size={18} className="mr-2.5" />, label: 'Producción' },
                   { path: '/contacto', icon: <Mail size={18} className="mr-2.5" />, label: 'Contacto' }
                 ].map((item, index) => (
                   <motion.div
