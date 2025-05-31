@@ -1,11 +1,11 @@
-import { Youtube, Mail, Headphones, Copyright, Radio, Instagram, Linkedin } from 'lucide-react';
+import { Youtube, Mail, Copyright, Instagram, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
     return (
-    <footer className="footer-summer relative bg-summer-dark/50 backdrop-blur-md">
+    <footer className="footer-summer relative bg-summer-dark">
       {/* Gradiente superior con efecto de brillo */}
       <motion.div 
         className="absolute top-0 w-full h-1.5 bg-gradient-to-r from-yellow-400/10 via-yellow-400/60 to-yellow-400/10"
@@ -170,7 +170,7 @@ const Footer = () => {
               whileHover={{ y: -3, scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="p-5 bg-gradient-to-br from-yellow-400/10 to-orange-400/5 backdrop-blur-sm rounded-[1rem] border border-yellow-400/20 hover:border-yellow-400/30 transition-all duration-300 group hover:shadow-lg hover:shadow-yellow-400/10">
+              <div className="p-5 bg-summer-dark/90 rounded-[1rem] border border-yellow-400/20 hover:border-yellow-400/30 transition-all duration-300 group hover:shadow-lg hover:shadow-yellow-400/10">
                 <h4 className="text-white text-sm font-medium mb-3 flex items-center">
                   <div className="p-2 bg-yellow-400/20 rounded-full mr-3 group-hover:bg-yellow-400/30 transition-colors">
                     <Mail size={14} className="text-yellow-400" />

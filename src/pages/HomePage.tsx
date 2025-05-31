@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Play, ChevronRight, Headphones, Mic, Film, Gamepad2, Sparkles, Clock, Calendar } from 'lucide-react';
+import { Play, ChevronRight, Headphones, Mic, Film, Gamepad2, Sparkles, Clock, Calendar, Tag } from 'lucide-react';
 import Episode from '../components/Episode';
 import episodesData from '../json/episodios.json';
 import { Episode as EpisodeType } from '../interfaces/Episode';
+import { getTagStyle } from '../utils/tagStyles';
 import AudioPlayer from '../components/AudioPlayer';
 import '../styles/animations.css';
 import { motion } from 'framer-motion';
@@ -155,9 +156,8 @@ const HomePage = () => {
               Imagen: Pramod Tiwari vía Unsplash
             </a>
           </div>
-          {/* Decorative elements - More subtle */}
-          <motion.div 
-            className="absolute -top-6 -right-6 w-40 h-40 bg-yellow-300/15 rounded-full blur-3xl z-0"
+          {/* Decorative elements - More subtle */}          <motion.div 
+            className="absolute -top-6 -right-6 w-40 h-40 bg-yellow-300/10 rounded-full z-0"
             animate={{ 
               scale: [1, 1.1, 1],
               opacity: [0.5, 0.7, 0.5]
@@ -168,9 +168,8 @@ const HomePage = () => {
               repeat: Infinity,
               repeatType: "reverse" 
             }}
-          ></motion.div>
-          <motion.div 
-            className="absolute -bottom-6 -left-6 w-40 h-40 bg-blue-400/15 rounded-full blur-3xl z-0"
+          ></motion.div>          <motion.div 
+            className="absolute -bottom-6 -left-6 w-40 h-40 bg-blue-400/10 rounded-full z-0"
             animate={{ 
               scale: [1, 1.2, 1],
               opacity: [0.5, 0.7, 0.5]
@@ -261,13 +260,18 @@ const HomePage = () => {
               
               {latestEpisode.label && latestEpisode.label.length > 0 && (
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {latestEpisode.label.map((tag: string, index: number) => (
-                    <span 
+                  {latestEpisode.label.map((tag: string, index: number) => (                    <motion.span 
                       key={index} 
-                      className="px-2.5 py-1 text-sm rounded-full font-medium bg-yellow-400/10 text-summer-dark border border-yellow-400/30"
+                      className={getTagStyle(index)}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.1 * index }}
                     >
+                      <Tag size={14} className="opacity-70" />
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
               )}
@@ -300,19 +304,15 @@ const HomePage = () => {
           </div>
         </motion.div>
       </motion.div>      {/* Proceso Creativo Section - Ultra modern summer vibes */}      <motion.div 
-        className="mb-20 relative overflow-hidden !bg-transparent"
+        className="mb-20 relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7 }}
-      >{/* Background Elements - Improved specificity */}
-        <div className="!absolute inset-0 bg-gradient-to-b from-orange-100 via-orange-50 to-yellow-50 rounded-[2rem] -z-10" style={{ backgroundColor: 'rgba(255, 247, 237, 0.7)' }}></div>
-        <div className="!absolute -top-24 -right-24 w-64 h-64 bg-orange-400 opacity-20 rounded-full blur-3xl"></div>
-        <div className="!absolute -bottom-32 -left-32 w-72 h-72 bg-orange-300 opacity-20 rounded-full blur-3xl"></div>
-        <div className="!absolute top-1/3 right-1/4 w-32 h-32 bg-orange-200 opacity-10 rounded-full blur-3xl"></div>
-        <div className="!absolute top-20 left-10 w-10 h-10 bg-orange-400 opacity-20 rounded-full"></div>
-        <div className="!absolute bottom-20 right-10 w-10 h-10 bg-orange-500 opacity-20 rounded-full"></div>          {/* Content Container */}
-        <div className="rounded-[2rem] backdrop-blur-sm bg-white/30 border border-white/40 shadow-xl p-8 md:p-12 relative z-10" style={{backgroundColor: 'rgba(255, 237, 213, 0.5)'}}>
+      >
+        <div className="absolute inset-0 bg-orange-100 -z-10"></div>
+          {/* Content Container */}
+        <div className="bg-white shadow-md p-8 md:p-12 relative z-10">
           <motion.div 
             className="text-center mb-12"
             initial={{ opacity: 0, y: 15 }}
@@ -362,17 +362,15 @@ const HomePage = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            {/* Card 1 */}
-            <motion.div 
-              className="bg-gradient-to-br from-orange-100/80 to-orange-50/90 backdrop-blur-sm p-6 lg:p-8 rounded-[1.25rem] border border-orange-200/50 shadow-lg relative overflow-hidden group"
+            {/* Card 1 */}            <motion.div 
+              className="bg-orange-50 p-6 lg:p-8 border-l-4 border-orange-400 shadow-md relative overflow-hidden group"
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               viewport={{ once: true }}
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-300 to-orange-500"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-300/20 rounded-full blur-2xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
                 <div className="relative">                <div className="flex justify-center mb-6">
                   <motion.div 
-                    className="bg-gradient-to-br from-orange-500 to-orange-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                    className="bg-gradient-to-br from-orange-500 to-orange-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                     whileHover={{ 
                       rotate: [0, -10, 10, -10, 0],
                       transition: { duration: 0.5 } 
@@ -399,18 +397,16 @@ const HomePage = () => {
               </div>
             </motion.div>
             
-            {/* Card 2 */}
-            <motion.div 
-              className="bg-gradient-to-br from-yellow-100/80 to-yellow-50/90 backdrop-blur-sm p-6 lg:p-8 rounded-[1.25rem] border border-yellow-200/50 shadow-lg relative overflow-hidden group"
+            {/* Card 2 */}            <motion.div 
+              className="bg-yellow-50 p-6 lg:p-8 border-l-4 border-yellow-400 shadow-md relative overflow-hidden group"
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-300 to-yellow-500"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-300/20 rounded-full blur-2xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
                 <div className="relative">                <div className="flex justify-center mb-6">
                   <motion.div 
-                    className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                    className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                     whileHover={{ 
                       scale: [1, 1.2, 1],
                       transition: { duration: 0.5 } 
@@ -437,18 +433,16 @@ const HomePage = () => {
               </div>
             </motion.div>
             
-            {/* Card 3 */}
-            <motion.div 
-              className="bg-gradient-to-br from-blue-100/80 to-blue-50/90 backdrop-blur-sm p-6 lg:p-8 rounded-[1.25rem] border border-blue-200/50 shadow-lg relative overflow-hidden group"
+            {/* Card 3 */}            <motion.div 
+              className="bg-blue-50 p-6 lg:p-8 border-l-4 border-blue-400 shadow-md relative overflow-hidden group"
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
                 <div className="relative">                <div className="flex justify-center mb-6">
                   <motion.div 
-                    className="bg-gradient-to-br from-blue-500 to-blue-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                    className="bg-gradient-to-br from-blue-500 to-blue-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                     whileHover={{ 
                       rotate: 360,
                       transition: { duration: 0.5, ease: "easeInOut" } 
@@ -478,41 +472,16 @@ const HomePage = () => {
         </div>
       </motion.div>      {/* Temas que exploramos - Ultra modern design */}      
       <motion.div 
-        className="mb-20 relative overflow-hidden !bg-transparent"
+        className="mb-20 relative overflow-hidden"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.6, delay: 0.2 }}
-      >{/* Background Elements - Improved specificity */}
-        <div className="!absolute inset-0 bg-gradient-to-br from-purple-100 via-purple-50 to-blue-50 rounded-[2rem] -z-10" style={{ backgroundColor: 'rgba(243, 232, 255, 0.7)' }}></div>
-        <div className="!absolute -top-16 -right-16 w-48 h-48 bg-purple-400 opacity-15 rounded-full blur-3xl"></div>
-        <div className="!absolute -bottom-24 -left-24 w-64 h-64 bg-purple-300 opacity-15 rounded-full blur-3xl"></div>
-        <motion.div 
-          className="absolute top-20 left-20 w-6 h-6 bg-purple-400 opacity-20 rounded-full"
-          animate={{ 
-            y: [0, -10, 0],
-            opacity: [0.2, 0.5, 0.2]
-          }}
-          transition={{ 
-            duration: 4, 
-            ease: "easeInOut", 
-            repeat: Infinity
-          }}
-        ></motion.div>        <motion.div 
-          className="absolute bottom-32 right-32 w-4 h-4 bg-purple-500 opacity-20 rounded-full"
-          animate={{ 
-            y: [0, 10, 0],
-            opacity: [0.2, 0.5, 0.2]
-          }}
-          transition={{ 
-            duration: 5, 
-            ease: "easeInOut", 
-            repeat: Infinity,
-            delay: 1
-          }}
-        ></motion.div>
+      >
+        <div className="absolute inset-0 bg-purple-100 -z-10"></div>
           {/* Content Container */}
-        <div className="rounded-[2rem] backdrop-blur-sm bg-white/30 border border-white/40 shadow-xl p-8 md:p-12 relative z-10" style={{backgroundColor: 'rgba(233, 213, 255, 0.5)'}}>          <div className="text-center mb-8">
+        <div className="bg-white shadow-md p-8 md:p-12 relative z-10">
+          <div className="text-center mb-8">
             <motion.span
                 className="block text-sm font-bold tracking-widest uppercase text-purple-600 mb-2"
                 initial={{ opacity: 0, y: -10 }}
@@ -529,8 +498,7 @@ const HomePage = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <span className="relative">
+            >              <span className="relative">
                 Temas que exploramos
                 <svg className="absolute -bottom-2 w-full" height="6" viewBox="0 0 240 6" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0,3 C60,0 180,6 240,3" stroke="#8b5cf6" strokeWidth="4" fill="none" />
@@ -553,17 +521,14 @@ const HomePage = () => {
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
-          >{/* Películas */}
-            <motion.div
-              className="flex flex-col items-center p-5 bg-gradient-to-br from-red-100/80 to-red-50/90 backdrop-blur-sm rounded-[1.25rem] border border-red-200/40 shadow-lg overflow-hidden group"
+          >{/* Películas */}            <motion.div
+              className="flex flex-col items-center p-5 bg-red-50 border-l-4 border-red-400 shadow-md overflow-hidden group relative"
               variants={fadeInUp}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-300 to-red-500"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-red-300/20 rounded-full blur-xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
-              <div className="flex justify-center mb-4">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-300 to-red-500"></div>              <div className="flex justify-center mb-4">
                 <motion.div 
-                  className="bg-gradient-to-br from-red-500 to-red-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                  className="bg-gradient-to-br from-red-500 to-red-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                   whileHover={{ 
                     scale: [1, 1.1, 1],
                     transition: { duration: 0.5 } 
@@ -575,17 +540,14 @@ const HomePage = () => {
               <h4 className="font-bold text-black text-center">Películas</h4>
               <p className="text-xs text-black/70 text-center mt-2">Análisis, críticas y recomendaciones</p>
             </motion.div>
-              {/* Videojuegos */}
-            <motion.div
-              className="flex flex-col items-center p-5 bg-gradient-to-br from-green-100/80 to-green-50/90 backdrop-blur-sm rounded-[1.25rem] border border-green-200/40 shadow-lg overflow-hidden group relative"
+              {/* Videojuegos */}            <motion.div
+              className="flex flex-col items-center p-5 bg-green-50 border-l-4 border-green-400 shadow-md overflow-hidden group relative"
               variants={fadeInUp}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-300 to-green-500"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-green-300/20 rounded-full blur-xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>
-              <div className="flex justify-center mb-4">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-300 to-green-500"></div>              <div className="flex justify-center mb-4">
                 <motion.div 
-                  className="bg-gradient-to-br from-green-500 to-green-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                  className="bg-gradient-to-br from-green-500 to-green-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                   whileHover={{ 
                     rotate: [-5, 5, -5, 0],
                     transition: { duration: 0.5 } 
@@ -597,16 +559,14 @@ const HomePage = () => {
               <h4 className="font-bold text-black text-center">Videojuegos</h4>
               <p className="text-xs text-black/70 text-center mt-2">Experiencias y novedades gaming</p>
             </motion.div>
-              {/* Tecnología */}
-            <motion.div
-              className="flex flex-col items-center p-5 bg-gradient-to-br from-blue-100/80 to-blue-50/90 backdrop-blur-sm rounded-[1.25rem] border border-blue-200/40 shadow-lg overflow-hidden group relative"
+              {/* Tecnología */}            <motion.div
+              className="flex flex-col items-center p-5 bg-blue-50 border-l-4 border-blue-400 shadow-md overflow-hidden group relative"
               variants={fadeInUp}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-blue-300/20 rounded-full blur-xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>              <div className="flex justify-center mb-4">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-300 to-blue-500"></div>              <div className="flex justify-center mb-4">
                 <motion.div 
-                  className="bg-gradient-to-br from-blue-500 to-blue-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                  className="bg-gradient-to-br from-blue-500 to-blue-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                   whileHover={{ 
                     rotate: 360,
                     transition: { duration: 0.7, ease: "easeInOut" } 
@@ -618,16 +578,14 @@ const HomePage = () => {
               <h4 className="font-bold text-black text-center">Tecnología</h4>
               <p className="text-xs text-black/70 text-center mt-2">Gadgets e innovaciones tech</p>
             </motion.div>
-              {/* Y más */}
-            <motion.div
-              className="flex flex-col items-center p-5 bg-gradient-to-br from-purple-100/80 to-purple-50/90 backdrop-blur-sm rounded-[1.25rem] border border-purple-200/40 shadow-lg overflow-hidden group relative"
+              {/* Y más */}            <motion.div
+              className="flex flex-col items-center p-5 bg-purple-50 border-l-4 border-purple-400 shadow-md overflow-hidden group relative"
               variants={fadeInUp}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-300 to-purple-500"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 bg-purple-300/20 rounded-full blur-xl -translate-x-full group-hover:translate-x-0 transition-transform duration-700"></div>              <div className="flex justify-center mb-4">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-300 to-purple-500"></div>              <div className="flex justify-center mb-4">
                 <motion.div 
-                  className="bg-gradient-to-br from-purple-500 to-purple-600 p-3.5 rounded-[0.8rem] shadow-lg inline-flex justify-center items-center"
+                  className="bg-gradient-to-br from-purple-500 to-purple-600 p-3.5 shadow-lg inline-flex justify-center items-center"
                   whileHover={{ 
                     scale: [1, 1.1, 1],
                     filter: ["brightness(1)", "brightness(1.2)", "brightness(1)"],

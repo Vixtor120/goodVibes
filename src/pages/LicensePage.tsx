@@ -17,11 +17,9 @@ const LicensePage = () => {
         <p className="text-white max-w-2xl mx-auto">
           Información sobre las licencias aplicadas a nuestro contenido
         </p>
-      </motion.div>
-
-      {/* Explicación simplificada */}
+      </motion.div>      {/* Explicación simplificada */}
       <motion.div 
-        className="mb-10 bg-white/80 rounded-xl p-6 border border-summer-accent/30 text-summer-dark"
+        className="mb-10 bg-white rounded-xl p-6 border border-summer-accent/30 text-summer-dark"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}

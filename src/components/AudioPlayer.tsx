@@ -149,33 +149,40 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
       audio.removeEventListener('play', handlePlay);
       audio.removeEventListener('pause', handlePause);
     };
-  }, [onPlayStateChange]);
-  return (
-    <div className="player-summer p-5 rounded-xl shadow-md relative overflow-hidden">
+  }, [onPlayStateChange]);  return (
+    <div className="player-summer p-5 shadow-md relative overflow-hidden border-l-4 border-l-orange-500" role="region" aria-label="Reproductor de audio">
+      {/* Top orange line */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600"></div>
+      
       {/* Progress Bar - Simplified and elegant */}
       <div className="relative mt-1 mb-5">
-        <div className="flex items-center justify-between text-xs font-medium text-summer-dark mb-1.5">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+        <div className="flex items-center justify-between text-sm font-medium text-summer-dark mb-1.5">
+          <span aria-label="Tiempo actual">{formatTime(currentTime)}</span>
+          <span aria-label="Duración total">{formatTime(duration)}</span>
         </div>
         
-        <div className="relative h-1.5 progress-summer rounded-full overflow-hidden group">          <div 
+        <div className="relative h-2.5 progress-summer overflow-hidden group" 
+             role="progressbar" 
+             aria-valuemin={0} 
+             aria-valuemax={duration || 100}
+             aria-valuenow={currentTime}
+             aria-valuetext={`${formatTime(currentTime)} de ${formatTime(duration)}`}
+        >
+          <div 
             ref={progressBarRef}
-            className="absolute h-full bg-gradient-to-r from-summer-turquoise to-summer-secondary"
+            className="absolute h-full bg-gradient-to-r from-orange-400 to-summer-turquoise"
             style={{ width: `${progressPercentage}%` }}
           ></div>
           
           {/* Minimalist progress handle */}
           <div 
-            className="absolute h-3 w-3 bg-summer-secondary rounded-full shadow-sm top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
+            className="absolute h-3 w-3 bg-orange-400 top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
             style={{ 
               left: `${progressPercentage}%`, 
               transform: `translateX(-50%) translateY(-50%)`,
-              boxShadow: '0 0 5px rgba(255, 209, 102, 0.5)'
+              boxShadow: '0 0 5px rgba(255, 107, 53, 0.5)'
             }}
-          ></div>
-          
-          <input
+          ></div>          <input
             type="range"
             min="0"
             max={duration || 100}
@@ -187,8 +194,14 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
             onTouchStart={handleProgressMouseDown}
             onTouchEnd={handleProgressMouseUp}
             className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            aria-label="Buscar en la línea de tiempo de audio"
+            aria-valuemin={0}
+            aria-valuemax={duration || 100}
+            aria-valuenow={currentTime}
+            aria-valuetext={`${formatTime(currentTime)} de ${formatTime(duration)}`}
           />
         </div>
+        <p className="sr-only">Usa el deslizador para avanzar o retroceder en la reproducción</p>
       </div>
 
       {/* Controls - Clean and centered */}
@@ -196,31 +209,39 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
         {/* Play/Pause Button - Larger and centered */}
         <button 
           onClick={togglePlayPause}
-          className="focus:outline-none transition-all duration-300 hover:scale-105 transform"
-          aria-label={isPlaying ? "Pause" : "Play"}
-        >          <div className={`flex items-center justify-center w-12 h-12 rounded-full ${
+          className="focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:rounded transition-all duration-300 hover:scale-105 transform"
+          aria-label={isPlaying ? "Pausar reproducción" : "Iniciar reproducción"}
+          title={isPlaying ? "Pausar" : "Reproducir"}
+        >
+          <div className={`flex items-center justify-center w-14 h-14 ${
             isPlaying 
-              ? 'bg-summer-secondary text-summer-dark hover:bg-summer-secondary/90' 
-              : 'bg-summer-secondary text-summer-dark hover:bg-summer-secondary/90'
-          } shadow-md transition-all duration-300`}>
+              ? 'bg-orange-400 text-white hover:bg-orange-500' 
+              : 'bg-summer-turquoise text-white hover:bg-summer-turquoise/90'
+          } shadow-md transition-all duration-300 border-t-2 border-t-summer-accent`}>
             {isPlaying ? 
-              <Pause size={20} /> : 
-              <Play size={20} className="ml-0.5" />
+              <Pause size={24} /> : 
+              <Play size={24} className="ml-0.5" />
             }
           </div>
         </button>
 
-        {/* Volume Control - Sleek and minimal */}
-        <div className="flex items-center space-x-2 bg-gray-700/70 px-3 py-1.5 rounded-full">          <button 
+        {/* Volume Control - Sleek and minimal */}        <div className="flex items-center space-x-2 bg-summer-dark/50 px-4 py-2.5 border-t-2 border-t-summer-turquoise rounded-l">
+          <button 
             onClick={() => setVolume(volume > 0 ? 0 : 1)}
-            className="text-black hover:text-summer-dark transition-colors"
-            aria-label={volume > 0 ? "Mute" : "Unmute"}
+            className="text-summer-turquoise hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-summer-turquoise focus:rounded"
+            aria-label={volume > 0 ? "Silenciar audio" : "Activar sonido"}
+            title={volume > 0 ? "Silenciar" : "Activar sonido"}
           >
-            {volume > 0 ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {volume > 0 ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
-          <div className="relative w-20 h-1 bg-gray-600 rounded-full overflow-hidden group">
+          <div className="relative w-24 h-2 bg-summer-dark/80 overflow-hidden group" 
+               role="progressbar" 
+               aria-valuemin={0} 
+               aria-valuemax={1}
+               aria-valuenow={volume}
+               aria-valuetext={`Volumen: ${Math.round(volume * 100)}%`}>
             <div 
-              className="h-full bg-summer-secondary"
+              className="h-full bg-summer-turquoise"
               style={{ width: `${volume * 100}%` }}
             ></div>
             
@@ -233,12 +254,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ src, autoplay = false, onPlay
               onChange={handleVolumeChange}
               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
               aria-label="Ajustar volumen"
-            />
-          </div>
+              title={`Volumen: ${Math.round(volume * 100)}%`}
+            />          </div>
         </div>
       </div>
 
-      <audio ref={audioRef} src={src} onEnded={() => setIsPlaying(false)} />
+      <audio ref={audioRef} src={src} onEnded={() => setIsPlaying(false)} preload="metadata" />
+      
+      {/* Hidden accessibility instructions */}
+      <div className="sr-only">
+        <p>Controles de teclado: Barra espaciadora para reproducir/pausar, flechas izquierda y derecha para avanzar o retroceder, M para silenciar</p>
+      </div>
     </div>
   );
 };

@@ -12,10 +12,9 @@
   --summer-text-dark: #1A1A2E; /* Texto casi negro para máximo contraste */
   --summer-text-medium: #333F48; /* Texto gris oscuro para contraste medio */
   --summer-white: #ffffff;
-  --summer-light: #f0f8ff; /* Azul muy claro */
-  --summer-gray-light: rgba(255, 255, 255, 0.9); /* Más opaco para mejor contraste */
-  --summer-gray-medium: rgba(26, 26, 46, 0.7); /* Más oscuro para mejor contraste */
-  --summer-overlay: rgba(0, 68, 129, 0.7); /* Overlay azul semi-transparente */
+  --summer-light: #f0f8ff; /* Azul muy claro */  --summer-gray-light: #f8f9fa; /* Más opaco para mejor contraste */
+  --summer-gray-medium: #343a40; /* Más oscuro para mejor contraste */
+  --summer-overlay: #003459; /* Overlay azul sólido */
   
   /* Gradientes */
   --summer-gradient-primary: linear-gradient(120deg, #87CEEB, #0077B6);
@@ -96,8 +95,7 @@ body {
 
 /* Cards y contenedores */
 .card-summer {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+  background: white;
   border-radius: 12px;
   border: 1px solid rgba(255, 140, 102, 0.3);
   color: var(--summer-text-dark);
@@ -112,8 +110,7 @@ body {
 
 /* Navbar y Footer */
 .navbar-summer {
-  background: rgba(0, 52, 89, 0.7);
-  backdrop-filter: blur(10px);
+  background: var(--summer-dark);
   border-bottom: 1px solid var(--summer-accent);
 }
 
@@ -125,8 +122,7 @@ body {
 
 /* Elementos de reproducción */
 .player-summer {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
+  background: white;
   border: 1px solid rgba(255, 140, 102, 0.3);
   color: var(--summer-text-dark);
   box-shadow: var(--summer-shadow-md);

@@ -1,12 +1,14 @@
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import episodesData from '../json/episodios.json';
 import AudioPlayer from '../components/AudioPlayer';
 import VideoPlayer from '../components/VideoPlayer';
 import { Calendar, Clock, Share2, Tag, Loader, Music, Video } from 'lucide-react';
 import { shareEpisode } from '../utils/shareUtils';
 import { getAudioDuration } from '../utils/audioUtils';
+
+import { getTagStyle } from '../utils/tagStyles';
 
 const EpisodeDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,25 +36,7 @@ const EpisodeDetailPage = () => {
           setEpisodeDuration(null); // Don't use fallback, show loading error instead
           setIsLoadingDuration(false);
         });
-    }
-  }, [episode]);
-
-  // Get a color based on the label string for consistent coloring
-  const getLabelColor = (label: string): string => {
-    const colors = [
-      'bg-summer-accent/80 text-white border-summer-accent',
-      'bg-summer-turquoise/80 text-white border-summer-turquoise',
-      'bg-summer-mint/80 text-white border-summer-mint',
-      'bg-summer-secondary/80 text-white border-summer-secondary',
-      'bg-summer-accent/60 text-white border-summer-accent/60',
-      'bg-summer-turquoise/60 text-white border-summer-turquoise/60',
-      'bg-summer-mint/60 text-white border-summer-mint/60',
-      'bg-summer-secondary/60 text-white border-summer-secondary/60'
-    ];
-    // Use the sum of character codes to determine a consistent color
-    const sum = label.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-    return colors[sum % colors.length];
-  };
+    }  }, [episode]);
 
   // Efecto para hacer scroll al reproductor y autoplay si es necesario
   useEffect(() => {
@@ -117,17 +101,19 @@ const EpisodeDetailPage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-      >        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise">{episode.title}</h1>
-        <div className="flex flex-wrap items-center text-sm text-white gap-4 mb-6">
-          <span className="flex items-center">
-            <Calendar size={16} className="mr-1 text-summer-accent" /> 
+      >
+        <h1 className="text-3xl md:text-4xl font-bold text-summer-dark mb-4">{episode.title}</h1>
+        
+        <div className="flex flex-wrap items-center text-sm text-summer-dark gap-4 mb-6">
+          <span className="flex items-center border-l-2 border-orange-400 pl-2">
+            <Calendar size={16} className="mr-1 text-orange-400" /> 
             {episode.date}
           </span>
-          <span className="flex items-center">
-            <Clock size={16} className="mr-1 text-purple-400" /> 
+          <span className="flex items-center border-l-2 border-summer-turquoise pl-2">
+            <Clock size={16} className="mr-1 text-summer-turquoise" /> 
             {isLoadingDuration ? (
               <span className="flex items-center">
-                <Loader size={12} className="animate-spin mr-1" />
+                <Loader size={12} className="animate-spin mr-1 text-summer-accent" />
                 Calculando...
               </span>
             ) : (
@@ -144,40 +130,43 @@ const EpisodeDetailPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}
           >
-            {episode.label.map((tag: string, index: number) => (
-              <motion.span
+            {episode.label.map((tag: string, index: number) => (              <motion.span
                 key={index}
-                className={`px-3 py-1 rounded-full text-sm font-medium border ${getLabelColor(tag)} flex items-center`}
-                whileHover={{ scale: 1.05 }}
+                className={getTagStyle(index)}
+                whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
               >
-                <Tag size={12} className="mr-1.5 opacity-80" />
+                <Tag size={14} className="opacity-70" />
                 {tag}
               </motion.span>
             ))}
           </motion.div>
         )}
 
-        {/* Toggle for Audio/Video */}
-        <div className="absolute top-0 right-0 flex items-center space-x-2">
+        {/* Media Toggle Controls */}
+        <div className="absolute top-0 right-0 flex items-center rounded-bl-lg overflow-hidden shadow-lg">
           <button
             onClick={() => setIsVideoMode(false)}
-            className={`p-2 rounded-full flex items-center justify-center ${
-              !isVideoMode ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300'
-            }`}
-            aria-label="Switch to Audio"
+            className={`p-2 flex items-center justify-center border-t-2 ${
+              !isVideoMode 
+                ? 'border-t-orange-500 bg-white text-orange-500 shadow-inner' 
+                : 'border-t-transparent bg-gray-100 text-gray-600 hover:bg-white/90'
+            } transition-all duration-300`}
+            aria-label="Cambiar a Audio"
           >
             <Music size={20} />
           </button>
           <button
             onClick={() => setIsVideoMode(true)}
-            className={`p-2 rounded-full flex items-center justify-center ${
-              isVideoMode ? 'bg-purple-600 text-white' : 'bg-gray-700 text-gray-300'
-            }`}
-            aria-label="Switch to Video"
+            className={`p-2 flex items-center justify-center border-t-2 ${
+              isVideoMode 
+                ? 'border-t-orange-500 bg-white text-orange-500 shadow-inner' 
+                : 'border-t-transparent bg-gray-100 text-gray-600 hover:bg-white/90'
+            } transition-all duration-300`}
+            aria-label="Cambiar a Video"
           >
             <Video size={20} />
           </button>
@@ -192,89 +181,102 @@ const EpisodeDetailPage = () => {
         animate="animate"
       >
         <div className="md:col-span-2">
-          {/* Cover Image */}
+          {/* Cover Image or Video */}
           {!isVideoMode && (
-            <motion.img 
-              src={episode.imageUrl} 
-              alt={episode.title} 
-              className="w-full aspect-video object-cover rounded-xl shadow-lg mb-6"
+            <motion.div
+              className="w-full aspect-video relative mb-6 border-t-4 border-orange-500 shadow-lg rounded-xl overflow-hidden"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-            />
+            >
+              <img 
+                src={episode.imageUrl} 
+                alt={episode.title} 
+                className="w-full aspect-video object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            </motion.div>
           )}
-          
+
+          {/* Description */}
+          <motion.div 
+            className="prose prose-lg max-w-none mb-8"
+            variants={fadeInUp}
+          >
+            <p className="text-summer-dark leading-relaxed">{episode.description}</p>
+          </motion.div>
+
           {/* Media Player */}
           <motion.div 
-            ref={audioRef} 
-            className="mb-8"
+            ref={audioRef}
+            className="mb-8 bg-white rounded-xl shadow-xl overflow-hidden"
             variants={fadeInUp}
           >
-            {isVideoMode ? (
+            {isVideoMode && episode.videoUrl ? (
               <VideoPlayer src={episode.videoUrl} autoplay={shouldAutoplay} />
+            ) : episode.videoUrl ? (
+              <AudioPlayer src={episode.videoUrl} autoplay={shouldAutoplay} />
             ) : (
-              <AudioPlayer src={episode.audioUrl} autoplay={shouldAutoplay} />
+              <div className="p-4 text-summer-dark text-center bg-orange-50">
+                No hay contenido multimedia disponible
+              </div>
             )}
           </motion.div>
-          
-          {/* Description */}          <motion.div 
-            className="bg-white/90 rounded-xl p-6 mb-6 shadow-lg border border-summer-accent/20"
-            variants={fadeInUp}
-          >
-            <h2 className="text-xl font-semibold text-summer-text-dark mb-4 border-b border-summer-accent/30 pb-2">Descripción del episodio</h2>
-            <p className="text-summer-text-medium leading-relaxed font-medium">{episode.description}</p>
-          </motion.div>
-          
-          {/* Share Section */}          <motion.div 
-            className="flex flex-wrap gap-4 justify-between items-center bg-summer-dark/80 p-4 rounded-xl border border-summer-accent/30"
-            variants={fadeInUp}
-          >
-            <div className="flex items-center">
-              <motion.button 
-                className="bg-gradient-to-r from-summer-accent to-summer-accent-hover hover:from-summer-accent-hover hover:to-summer-accent text-white px-4 py-2 rounded-lg flex items-center transition-all duration-300 relative font-medium"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleShare}
-              >
-                <Share2 size={16} className="mr-2" />
-                Compartir episodio
-                {showShareFeedback && (
-                  <span className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-2 rounded whitespace-nowrap">
-                    {'share' in navigator ? '¡Compartido!' : '¡Enlace copiado!'}
-                  </span>
-                )}
-              </motion.button>
-            </div>
-          </motion.div>
         </div>
-        
-        {/* Sidebar */}
+
+        {/* Share Section - Improved */}
         <motion.div 
-          className="md:col-span-1"
+          className="relative"
           variants={fadeInUp}
-        >          <div className="bg-white/90 rounded-xl p-6 sticky top-24 border border-summer-accent/20 shadow-lg">
-            <h3 className="text-lg font-semibold text-summer-text-dark mb-4 border-b border-summer-accent/30 pb-2">Más episodios</h3>
-            
-            <div className="space-y-4">
-              {episodesData.filter(ep => ep.id !== parseInt(id || '', 10)).slice(0, 3).map((ep, index) => (
-                <motion.a 
-                  key={ep.id} 
-                  href={`/episodios/${ep.id}`}
-                  className="flex items-start space-x-3 group hover:bg-summer-accent/10 p-2 rounded-lg transition-all"
-                  variants={fadeInUp}
-                  custom={index}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <img 
-                    src={ep.imageUrl} 
-                    alt={ep.title}
-                    className="w-16 h-16 object-cover rounded-lg group-hover:brightness-110 transition-all" 
-                  />
-                  <div>                  <h4 className="text-summer-text-dark font-medium line-clamp-2 group-hover:text-summer-accent transition-colors">{ep.title}</h4>
-                    <p className="text-xs text-summer-text-medium font-medium">{ep.date}</p>
-                  </div>
-                </motion.a>
-              ))}
+        >
+          <div className="sticky top-4">
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-6 border border-summer-accent/10">
+              <h2 className="text-xl font-semibold text-summer-dark mb-4 flex items-center gap-2">
+                <Share2 size={20} className="text-summer-accent" />
+                Comparte este episodio
+              </h2>
+                <motion.button
+                onClick={handleShare}
+                className="w-full py-3.5 px-6 rounded-lg font-medium 
+                         bg-gradient-to-r from-orange-500 to-orange-600
+                         hover:from-orange-600 hover:to-orange-700
+                         text-white
+                         transition-all duration-300 
+                         shadow-md hover:shadow-xl hover:shadow-orange-400/30
+                         flex items-center justify-center gap-3 group"
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Share2 
+                  size={20} 
+                  className="group-hover:rotate-12 transition-transform duration-300" 
+                />
+                <span className="text-base font-medium">Compartir episodio</span>
+              </motion.button>
+              
+              <AnimatePresence>
+                {showShareFeedback && (
+                  <motion.div 
+                    className="mt-4 bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm flex items-center justify-center gap-2 shadow-sm"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="font-medium">¡Enlace copiado correctamente!</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Información adicional */}
+              <div className="mt-6 pt-4 border-t border-gray-100">
+                <p className="text-sm text-gray-600">
+                  Comparte este episodio con tus amigos y ayúdanos a difundir las buenas vibraciones del verano.
+                </p>
+              </div>
             </div>
           </div>
         </motion.div>

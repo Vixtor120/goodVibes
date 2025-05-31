@@ -86,36 +86,47 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoplay = false }) => {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
-  const progressPercentage = (currentTime / duration) * 100 || 0;
-  return (
-    <div className="player-summer p-5 rounded-xl shadow-md relative overflow-hidden">
+  const progressPercentage = (currentTime / duration) * 100 || 0;  return (
+    <div className="player-summer p-5 shadow-md relative overflow-hidden border-l-4 border-l-orange-500" role="region" aria-label="Reproductor de vídeo">
+      {/* Top orange line */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600"></div>
+      
       {/* Video Element */}
       <div className="relative group">
         <video
           ref={videoRef}
           src={src}
-          className="w-full rounded-lg"
+          className="w-full"
           style={{ display: 'block' }}
+          preload="metadata"
+          aria-label="Contenido de vídeo"
+          playsInline
+          controlsList="nodownload"
         />
       </div>
 
       {/* Progress Bar */}
       <div className="relative mt-4 mb-5">
-        <div className="flex items-center justify-between text-xs font-medium text-gray-400 mb-1.5">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+        <div className="flex items-center justify-between text-sm font-medium text-summer-dark mb-1.5">
+          <span aria-label="Tiempo actual">{formatTime(currentTime)}</span>
+          <span aria-label="Duración total">{formatTime(duration)}</span>
         </div>
-        <div className="relative h-1.5 bg-gray-700 rounded-full overflow-hidden group">
+        <div className="relative h-2.5 bg-summer-dark/30 overflow-hidden group"
+             role="progressbar" 
+             aria-valuemin={0} 
+             aria-valuemax={duration || 100}
+             aria-valuenow={currentTime}
+             aria-valuetext={`${formatTime(currentTime)} de ${formatTime(duration)}`}>
           <div
-            className="absolute h-full bg-gradient-to-r from-indigo-500 to-purple-400"
+            className="absolute h-full bg-gradient-to-r from-orange-400 to-summer-turquoise"
             style={{ width: `${progressPercentage}%` }}
           ></div>
           <div
-            className="absolute h-3 w-3 bg-white rounded-full shadow-sm top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
+            className="absolute h-3 w-3 bg-orange-400 top-1/2 opacity-0 group-hover:opacity-100 transition-all duration-200"
             style={{
               left: `${progressPercentage}%`,
               transform: `translateX(-50%) translateY(-50%)`,
-              boxShadow: '0 0 5px rgba(255, 255, 255, 0.3)',
+              boxShadow: '0 0 5px rgba(255, 107, 53, 0.5)',
             }}
           ></div>
           <input
@@ -130,41 +141,49 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoplay = false }) => {
             onTouchStart={handleProgressMouseDown}
             onTouchEnd={handleProgressMouseUp}
             className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+            aria-label="Buscar en la línea de tiempo de vídeo"
+            aria-valuemin={0}
+            aria-valuemax={duration || 100}
+            aria-valuenow={currentTime}
+            aria-valuetext={`${formatTime(currentTime)} de ${formatTime(duration)}`}
           />
         </div>
-      </div>
-
-      {/* Controls */}
+        <p className="sr-only">Usa el deslizador para avanzar o retroceder en la reproducción</p>
+      </div>      {/* Controls */}
       <div className="flex items-center justify-between">
-        {/* Play/Pause Button */}
-        <button
+        {/* Play/Pause Button */}        <button
           onClick={togglePlayPause}
-          className="focus:outline-none transition-all duration-300 hover:scale-105 transform"
-          aria-label={isPlaying ? 'Pause' : 'Play'}
+          className="focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 transition-all duration-300 hover:scale-105 transform"
+          aria-label={isPlaying ? 'Pausar vídeo' : 'Reproducir vídeo'}
+          title={isPlaying ? "Pausar" : "Reproducir"}
         >
           <div
-            className={`flex items-center justify-center w-12 h-12 rounded-full ${
+            className={`flex items-center justify-center w-14 h-14 ${
               isPlaying
-                ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-                : 'bg-purple-600 text-white hover:bg-purple-500'
-            } shadow-md transition-all duration-300`}
+                ? 'bg-orange-400 text-white hover:bg-orange-500'
+                : 'bg-summer-turquoise text-white hover:bg-summer-turquoise/90'
+            } shadow-md transition-all duration-300 border-t-2 border-t-summer-accent`}
           >
-            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+            {isPlaying ? <Pause size={24} /> : <Play size={24} />}
           </div>
-        </button>
-
-        {/* Volume Control */}
-        <div className="flex items-center space-x-2 bg-gray-700/70 px-3 py-1.5 rounded-full">
+        </button>        {/* Volume Control */}
+        <div className="flex items-center space-x-2 bg-summer-dark/50 px-4 py-2.5 border-t-2 border-t-summer-turquoise rounded-l">
           <button
             onClick={() => setVolume(volume > 0 ? 0 : 1)}
-            className="text-gray-300 hover:text-white transition-colors"
-            aria-label={volume > 0 ? 'Mute' : 'Unmute'}
+            className="text-summer-turquoise hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-summer-turquoise"
+            aria-label={volume > 0 ? 'Silenciar audio' : 'Activar sonido'}
+            title={volume > 0 ? "Silenciar" : "Activar sonido"}
           >
-            {volume > 0 ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            {volume > 0 ? <Volume2 size={18} /> : <VolumeX size={18} />}
           </button>
-          <div className="relative w-20 h-1 bg-gray-600 rounded-full overflow-hidden group">
+          <div className="relative w-24 h-2 bg-summer-dark/80 overflow-hidden group"
+               role="progressbar" 
+               aria-valuemin={0} 
+               aria-valuemax={1}
+               aria-valuenow={volume}
+               aria-valuetext={`Volumen: ${Math.round(volume * 100)}%`}>
             <div
-              className="h-full bg-purple-500"
+              className="h-full bg-summer-turquoise"
               style={{ width: `${volume * 100}%` }}
             ></div>
             <input
@@ -175,10 +194,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ src, autoplay = false }) => {
               value={volume}
               onChange={handleVolumeChange}
               className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-              aria-label="Adjust volume"
-            />
-          </div>
+              aria-label="Ajustar volumen"
+              title={`Volumen: ${Math.round(volume * 100)}%`}
+            />          </div>
         </div>
+      </div>
+      
+      {/* Hidden accessibility instructions */}
+      <div className="sr-only">
+        <p>Controles de teclado: Barra espaciadora para reproducir/pausar, flechas izquierda y derecha para avanzar o retroceder, M para silenciar</p>
       </div>
     </div>
   );

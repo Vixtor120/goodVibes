@@ -25,12 +25,12 @@ function Navbar() {
 
   return (
     <>
-      <header className={`fixed w-full top-0 z-50 transition-all duration-300 navbar-summer ${
+    <header className={`fixed w-full top-0 z-50 transition-all duration-300 navbar-summer ${
         scrollActivo 
-          ? "bg-summer-dark/70 backdrop-blur-md shadow-md shadow-summer-shadow-sm" 
+          ? "bg-summer-dark shadow-md shadow-summer-shadow-sm" 
           : menuAbierto 
-            ? "bg-summer-dark/60 backdrop-blur-sm" 
-            : "bg-summer-dark/40 backdrop-blur-sm"
+            ? "bg-summer-dark" 
+            : "bg-summer-dark"
       }`}>
         <div className="relative">
           <motion.div 
@@ -68,14 +68,11 @@ function Navbar() {
                     className="h-auto w-full"
                   />
                 </motion.div>
-              </motion.a>
-
-              {/* Desktop Navigation */}
+              </motion.a>              {/* Desktop Navigation */}
               <nav className="hidden md:flex space-x-1 lg:space-x-3">
                 { [
                   { path: '/', icon: <Home size={16} className="mr-1.5" />, label: 'Home' },
                   { path: '/episodios', icon: <Headphones size={16} className="mr-1.5" />, label: 'Episodios' },
-                  { path: '/produccion', icon: <Settings size={16} className="mr-1.5" />, label: 'Producción' },
                   { path: '/contacto', icon: <Mail size={16} className="mr-1.5" />, label: 'Contacto' }
                 ].map((item) => (
                   <motion.div
@@ -187,7 +184,7 @@ function Navbar() {
         <AnimatePresence>
           {menuAbierto && (
             <motion.div 
-              className="md:hidden bg-gradient-to-b from-gray-900/95 to-gray-900/95 backdrop-blur-md pb-4 overflow-hidden"
+              className="md:hidden bg-summer-dark pb-4 overflow-hidden"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}

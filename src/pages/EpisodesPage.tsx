@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import Episode from '../components/Episode';
 import episodesData from '../json/episodios.json';
 import { Episode as EpisodeType } from '../interfaces/Episode';
-import { Play, Filter, ChevronDown, Loader } from 'lucide-react';
+import { Play, Filter, ChevronDown, Loader, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { updateEpisodesDuration } from '../utils/audioUtils';
+import { getTagStyle } from '../utils/tagStyles';
 
 const EpisodesPage = () => {
   const [episodes, setEpisodes] = useState<EpisodeType[]>([]);
@@ -100,11 +101,11 @@ const EpisodesPage = () => {
         initial={{ opacity: 0, y: -15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-      >        <h1 className="text-4xl font-bold text-white mb-3 bg-clip-text text-transparent bg-gradient-to-r from-summer-accent to-summer-turquoise">
+      >        <h1 className="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-yellow-500">
           Nuestros Episodios
         </h1>
         <motion.p 
-          className="text-white max-w-2xl mx-auto text-lg"
+          className="text-summer-dark max-w-2xl mx-auto text-lg font-medium"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -115,14 +116,14 @@ const EpisodesPage = () => {
       
       {/* Loading indicator */}
       {isLoading ? (
-        <div className="flex justify-center items-center py-20">
+        <div          className="flex justify-center items-center py-20">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-col items-center"
           >
-            <Loader className="w-10 h-10 text-summer-accent animate-spin mb-4" />
-            <p className="text-white">Calculando duración de los episodios...</p>
+            <Loader className="w-10 h-10 text-orange-500 animate-spin mb-4" />
+            <p className="text-summer-dark font-medium">Calculando duración de los episodios...</p>
           </motion.div>
         </div>
       ) : (
@@ -133,29 +134,32 @@ const EpisodesPage = () => {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <div className="relative">
-              <button 
-                onClick={() => setShowTagFilter(!showTagFilter)}                className={`flex items-center justify-between w-full py-4 px-5 rounded-xl shadow-md transition-all ${                selectedTag 
-                    ? 'bg-summer-dark text-white border border-summer-accent/70' 
-                    : 'bg-white/90 text-summer-text-dark border border-summer-accent/30 hover:border-summer-accent/50 font-medium'
-                }`}
-              >
-                <div className="flex items-center">
-                  <Filter size={20} className={`mr-3 ${selectedTag ? 'text-summer-accent' : 'text-summer-dark/70'}`} />
-                  <span className="text-lg">{selectedTag || 'Filtrar por tema'}</span>
-                </div>                <motion.div
+          >              <div className="relative">
+                <motion.button 
+                  onClick={() => setShowTagFilter(!showTagFilter)}
+                  className={`flex items-center justify-between w-full py-4 px-5 shadow-md transition-all rounded-xl ${
+                    selectedTag 
+                      ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white border border-orange-400' 
+                      : 'bg-white text-summer-dark border border-orange-200 hover:border-orange-400'
+                  }`}
+                  whileHover={{ y: -1 }}
+                  whileTap={{ y: 0 }}
+                >
+                  <div className="flex items-center">
+                    <Filter size={20} className={`mr-3 ${selectedTag ? 'text-orange-500' : 'text-orange-500'}`} />
+                    <span className="text-lg text-summer-dark font-medium">{selectedTag || 'Filtrar por tema'}</span>
+                  </div>
+                  <motion.div
                   animate={{ rotate: showTagFilter ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
-                >
-                  <ChevronDown size={20} className="text-black" />
+                >                  <ChevronDown size={20} className="text-black" />
                 </motion.div>
-              </button>
+              </motion.button>
               
               {/* Tag Filter Dropdown */}
               <AnimatePresence>
-                {showTagFilter && (                  <motion.div 
-                    className="absolute z-20 mt-2 w-full bg-summer-dark/95 backdrop-blur-xl border border-summer-accent/30 rounded-xl shadow-xl overflow-hidden"
+                {showTagFilter && (                <motion.div 
+                    className="absolute z-20 mt-2 w-full bg-white border-t-4 border-t-orange-400 shadow-xl overflow-hidden rounded-xl backdrop-blur-sm"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
@@ -164,30 +168,38 @@ const EpisodesPage = () => {
                     <div className="max-h-[300px] overflow-y-auto py-1 divide-y divide-gray-700/30">
                       <button 
                         onClick={() => handleTagFilter(null)}
-                        className="w-full px-5 py-3 text-left text-white font-medium hover:bg-summer-accent/20 transition-colors flex items-center"
-                      >
-                        <span className="w-4 h-4 mr-3 rounded-full border-2 border-gray-500 flex items-center justify-center">
-                          {!selectedTag && <span className="w-2 h-2 bg-purple-500 rounded-full"></span>}
+                        className="w-full px-5 py-3 text-left text-summer-dark font-medium hover:bg-orange-50 transition-colors flex items-center"
+                      >                        <span className="w-4 h-4 mr-3 rounded-full border-2 border-orange-300 flex items-center justify-center">
+                          {!selectedTag && <span className="w-2 h-2 bg-orange-500 rounded-full"></span>}
                         </span>
                         Todos los temas
                       </button>
                       
-                      {allTags.map((tag, index) => (
-                        <motion.button 
+                      {allTags.map((tag, index) => (                        <motion.button 
                           key={tag}
-                          onClick={() => handleTagFilter(tag)}                          className={`w-full px-5 py-3 text-left transition-colors flex items-center ${
+                          onClick={() => handleTagFilter(tag)}
+                          className={`w-full px-5 py-3 text-left transition-colors flex items-center gap-3 ${
                             selectedTag === tag 
-                              ? 'bg-summer-accent/30 text-white font-medium' 
-                              : 'text-white hover:bg-summer-accent/20 font-medium'
+                              ? 'bg-orange-100 text-orange-700 font-medium' 
+                              : 'text-summer-dark hover:bg-orange-50 font-medium'
                           }`}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: index * 0.03 }}
+                          whileHover={{ x: 2 }}
                         >
-                          <span className="w-4 h-4 mr-3 rounded-full border-2 border-gray-500 flex items-center justify-center">
-                            {selectedTag === tag && <span className="w-2 h-2 bg-purple-500 rounded-full"></span>}
-                          </span>
-                          {tag}
+                          <div className="flex items-center gap-2">
+                            <Tag size={16} className="opacity-70" />
+                            {tag}
+                          </div>
+                          {selectedTag === tag && (
+                            <motion.span 
+                              className="w-2 h-2 bg-orange-500 rounded-full ml-auto"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              transition={{ type: "spring", stiffness: 200 }}
+                            />
+                          )}
                         </motion.button>
                       ))}
                     </div>
@@ -203,12 +215,11 @@ const EpisodesPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4 }}
-              >
-                <div className="bg-summer-accent/20 text-summer-accent rounded-full px-4 py-1 text-sm flex items-center">
+              >                <div className="bg-orange-100 text-orange-600 rounded-full px-4 py-1.5 text-sm flex items-center shadow-sm">
                   <span>Filtrando: <span className="font-medium">{selectedTag}</span></span>
                   <button 
                     onClick={() => setSelectedTag(null)}
-                    className="ml-2 hover:text-white"
+                    className="ml-2 hover:text-orange-800 transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -219,7 +230,7 @@ const EpisodesPage = () => {
             )}
             
             {/* Results Count */}            <motion.div 
-              className="mt-3 text-center text-black text-sm"
+              className="mt-3 text-center text-summer-dark text-sm font-medium"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.1 }}
@@ -230,16 +241,14 @@ const EpisodesPage = () => {
           
           {/* No Results Message */}
           {filteredEpisodes.length === 0 && (
-            <motion.div 
-              className="text-center py-16 bg-gradient-to-b from-gray-800/40 to-gray-900/40 rounded-2xl mb-14 border border-gray-700/30 backdrop-blur-sm"
+            <motion.div                  className="text-center py-16 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 backdrop-blur-sm rounded-2xl mb-14 border border-orange-300/30"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-            >
-              <div className="inline-block p-4 bg-gray-700/30 rounded-full mb-5">
-                <Filter className="h-8 w-8 text-summer-accent" />
-              </div>              <h3 className="text-2xl font-semibold text-white mb-3">No se encontraron episodios</h3>
-              <p className="text-black max-w-lg mx-auto mb-6">
+            >              <div className="inline-block p-4 bg-orange-100 rounded-full mb-5">
+                <Filter className="h-8 w-8 text-orange-500" />
+              </div>              <h3 className="text-2xl font-semibold text-summer-dark mb-3">No se encontraron episodios</h3>
+              <p className="text-summer-dark max-w-lg mx-auto mb-6">
                 No hay episodios que coincidan con el tema seleccionado. Prueba con otro tema o explora todos nuestros episodios.
               </p>
               <button 
@@ -266,11 +275,10 @@ const EpisodesPage = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white flex items-center">
+                >                  <h2 className="text-2xl md:text-3xl font-bold text-summer-dark flex items-center">
                     {!selectedTag && (
                       <motion.span 
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-md mr-3 text-sm"
+                        className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-3 py-1 rounded-md mr-3 text-sm"
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.3, delay: 0.2 }}
@@ -282,11 +290,10 @@ const EpisodesPage = () => {
                   </h2>
                 </motion.div>
                 
-                <motion.div 
-                  className="overflow-hidden rounded-2xl shadow-lg border border-gray-700/30 hover:border-purple-500/30 transition-all duration-500 bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90"
+                <motion.div                className="overflow-hidden rounded-2xl shadow-lg border border-orange-200/60 hover:border-orange-400/60 transition-all duration-500 bg-gradient-to-br from-white via-orange-50/30 to-orange-100/30 backdrop-blur-sm"
                   whileHover={{ 
                     y: -5,
-                    boxShadow: "0 20px 40px -15px rgba(124, 58, 237, 0.25)" 
+                    boxShadow: "0 20px 40px -15px rgba(251, 146, 60, 0.15)" 
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -297,7 +304,7 @@ const EpisodesPage = () => {
                         alt={latestEpisode.title}
                         className="absolute inset-0 w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent md:bg-gradient-to-t md:from-black/80 md:to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-summer-dark/80 via-summer-dark/60 to-transparent md:bg-gradient-to-t md:from-summer-dark/90 md:to-transparent"></div>
                       
                       <div className="absolute bottom-6 left-6 md:hidden">
                         <motion.button 
@@ -312,11 +319,11 @@ const EpisodesPage = () => {
                     </div>
                     
                     <div className="p-8 flex flex-col justify-between">
-                      <div>
-                        <span className="bg-gradient-to-r from-summer-accent/20 to-summer-accent/30 text-summer-accent text-xs px-3 py-1 rounded-full mb-3 inline-block">
+                      <div>                <span className="bg-orange-100 text-orange-700 px-3 py-1 rounded-full mb-3 inline-block text-sm font-medium shadow-sm">
                           {new Date(latestEpisode.date).toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric'})}
                         </span>
-                        <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3 leading-tight">{latestEpisode.title}</h3>                        <div className="flex items-center text-sm text-black mb-4">
+                        <h3 className="text-2xl md:text-3xl font-semibold text-summer-dark mb-3 leading-tight">{latestEpisode.title}</h3>
+                        <div className="flex items-center text-sm text-summer-dark mb-4">
                           <span className="flex items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1.5 text-summer-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -325,45 +332,37 @@ const EpisodesPage = () => {
                           </span>
                         </div>
                         
-                        {/* Episode Tags */}
-                        {latestEpisode.label && latestEpisode.label.length > 0 && (
+                        {/* Episode Tags */}                        {latestEpisode.label && latestEpisode.label.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 mb-4">
                             {latestEpisode.label.map((tag: string, index: number) => {
-                              // Generate tag colors
-                              const colors = [
-                                'bg-summer-accent/70 text-white',
-                                'bg-blue-500/70 text-blue-100',
-                                'bg-green-500/70 text-green-100',
-                                'bg-red-500/70 text-red-100',
-                                'bg-yellow-500/70 text-yellow-100'
-                              ];
-                              const sum = tag.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
-                              const colorClass = colors[sum % colors.length];
-                              
-                              // Highlight selected tag
                               const isSelected = tag === selectedTag;
                               
-                              return (
-                                <span 
+                              return (                                <motion.span 
                                   key={index} 
-                                  className={`px-3 py-1 text-xs rounded-full font-medium ${colorClass} ${
-                                    isSelected ? 'ring-2 ring-white ring-opacity-60' : ''
+                                  className={`${getTagStyle(index)} ${
+                                    isSelected ? 'ring-2 ring-orange-400 ring-opacity-60' : ''
                                   }`}
+                                  whileHover={{ scale: 1.03, y: -2 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  initial={{ opacity: 0, scale: 0.9 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.1 * index }}
                                 >
+                                  <Tag size={14} className="opacity-70" />
                                   {tag}
-                                </span>
+                                </motion.span>
                               );
                             })}
                           </div>
                         )}
                         
-                        <p className="text-black leading-relaxed line-clamp-3 md:line-clamp-4">{latestEpisode.description}</p>
+                        <p className="text-summer-dark leading-relaxed line-clamp-3 md:line-clamp-4">{latestEpisode.description}</p>
                       </div>
                       
                       <div className="mt-8 hidden md:block">
                         <motion.button 
                           onClick={handlePlayLatestEpisode}
-                          className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-7 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-purple-700/30 flex items-center"
+                          className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-7 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-orange-500/30 flex items-center"
                           whileHover={{ scale: 1.03, y: -2 }}
                           whileTap={{ scale: 0.97 }}
                         >
@@ -385,10 +384,9 @@ const EpisodesPage = () => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-16"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 flex items-center">
+            >              <h2 className="text-2xl md:text-3xl font-bold text-summer-dark mb-8 flex items-center">
                 {selectedTag ? (
-                  <span>Más episodios de <span className="text-summer-accent">{selectedTag}</span></span>
+                  <span>Más episodios de <span className="text-orange-500">{selectedTag}</span></span>
                 ) : (
                   'Episodios anteriores'
                 )}
@@ -405,12 +403,11 @@ const EpisodesPage = () => {
                     key={episode.id}
                     variants={fadeInUp}
                     custom={index}
-                    transition={{ delay: index * 0.08 }}
-                    className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl overflow-hidden border border-gray-700/40 hover:border-purple-500/30 transition-all duration-300 shadow-lg hover:shadow-purple-500/10"
+                    transition={{ delay: index * 0.08 }}                    className="bg-gradient-to-br from-white to-orange-50 rounded-xl overflow-hidden border border-orange-200 hover:border-orange-400 transition-all duration-300 shadow-lg hover:shadow-orange-500/20"
                     whileHover={{ 
                       y: -8, 
                       transition: { duration: 0.2 },
-                      boxShadow: "0 15px 30px -10px rgba(124, 58, 237, 0.2)"
+                      boxShadow: "0 15px 30px -10px rgba(251, 146, 60, 0.2)"
                     }}
                     onClick={() => navigate(`/episodios/${episode.id}`)}
                     style={{ cursor: 'pointer' }}

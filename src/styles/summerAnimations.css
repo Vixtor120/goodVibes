@@ -35,9 +35,7 @@
 /* Adornos veraniegos para agregar como decoración */
 .summer-bubble {
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(1px);
+  border-radius: 50%;  background: rgba(255, 255, 255, 0.3);
   z-index: -1;
   animation: floating-summer 6s ease-in-out infinite;
 }

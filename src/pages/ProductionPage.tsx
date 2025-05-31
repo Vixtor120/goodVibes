@@ -47,9 +47,8 @@ const ProductionPage = () => {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-        >
-          {/* Paso 1: Elección del Tema */}          <motion.div 
-            className="bg-white/80 p-6 rounded-xl border border-summer-accent/30 hover:border-summer-accent transition-all"
+        >          {/* Paso 1: Elección del Tema */}          <motion.div 
+            className="bg-white p-6 rounded-xl border border-summer-accent/30 hover:border-summer-accent transition-all"
             variants={fadeInUp}
             whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(255, 140, 102, 0.2)" }}
           >
@@ -63,10 +62,8 @@ const ProductionPage = () => {
               Seleccionamos temas que nos apasionan o que creemos que serán interesantes para nuestra audiencia. 
               ¡Nada de guiones rígidos, solo ideas y puntos clave para mantener la charla fluida!
             </p>
-          </motion.div>
-
-          {/* Paso 2: Grabación */}          <motion.div 
-            className="bg-white/80 p-6 rounded-xl border border-summer-turquoise/30 hover:border-summer-turquoise transition-all"
+          </motion.div>          {/* Paso 2: Grabación */}          <motion.div 
+            className="bg-white p-6 rounded-xl border border-summer-turquoise/30 hover:border-summer-turquoise transition-all"
             variants={fadeInUp}
             whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(0, 180, 216, 0.2)" }}
           >
@@ -80,10 +77,8 @@ const ProductionPage = () => {
               Nos sentamos frente al micrófono en un ambiente cómodo y grabamos la conversación de manera natural. 
               Lo importante es el contenido y la autenticidad.
             </p>
-          </motion.div>
-
-          {/* Paso 3: Edición y Publicación */}
-          <motion.div            className="bg-white/80 p-6 rounded-xl border border-summer-mint/30 hover:border-summer-mint transition-all"
+          </motion.div>          {/* Paso 3: Edición y Publicación */}
+          <motion.div className="bg-white p-6 rounded-xl border border-summer-mint/30 hover:border-summer-mint transition-all"
             variants={fadeInUp}
             whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(6, 214, 160, 0.2)" }}
           >
@@ -117,9 +112,8 @@ const ProductionPage = () => {
           initial="initial"
           whileInView="animate"
           viewport={{ once: true }}
-        >
-          {/* Audacity */}
-          <motion.div            className="bg-white/80 p-6 rounded-xl border border-summer-accent/30 hover:border-summer-accent transition-all"
+        >          {/* Audacity */}
+          <motion.div className="bg-white p-6 rounded-xl border border-summer-accent/30 hover:border-summer-accent transition-all"
             variants={fadeInUp}
             whileHover={{ scale: 1.02, boxShadow: "0 10px 25px -5px rgba(255, 140, 102, 0.2)" }}
           >
@@ -133,13 +127,11 @@ const ProductionPage = () => {
               Lo usamos para grabar, limpiar el ruido, ecualizar y mezclar el audio de nuestros episodios, 
               asegurando una experiencia auditiva de calidad para nuestros oyentes.
             </p>
-          </motion.div>
-
-          {/* Canva */}          <motion.div 
-            className="bg-white/80 p-6 rounded-xl border border-summer-turquoise/30 hover:border-summer-turquoise transition-all"
+          </motion.div>          {/* Canva */}          <motion.div 
+            className="bg-white p-6 rounded-xl border border-summer-turquoise/30 hover:border-summer-turquoise transition-all"
             variants={fadeInUp}
             whileHover={{ scale: 1.02 }}
-          >            <div className="flex items-center mb-4">
+          ><div className="flex items-center mb-4">
               <div className="bg-summer-turquoise/20 p-3 rounded-full mr-4">
                 <Palette className="text-summer-turquoise" size={24} />
               </div>

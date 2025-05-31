@@ -10,7 +10,6 @@ import HomePage from './pages/HomePage';
 import EpisodesPage from './pages/EpisodesPage';
 import ContactPage from './pages/ContactPage';
 import EpisodeDetailPage from './pages/EpisodeDetailPage';
-import ProductionPage from './pages/ProductionPage';
 import LicensePage from './pages/LicensePage';
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
             <Route path="/episodios" element={<EpisodesPage />} />
             <Route path="/episodios/:id" element={<EpisodeDetailPage />} />
             <Route path="/contacto" element={<ContactPage />} />
-            <Route path="/produccion" element={<ProductionPage />} />
             <Route path="/licencias" element={<LicensePage />} />
           </Routes>
         </main>
