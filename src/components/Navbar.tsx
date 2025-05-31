@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Home, Headphones, Mail, Radio, Youtube, Settings, Linkedin, Instagram } from 'lucide-react';
+import { Menu, X, Home, Headphones, Mail, Radio, Youtube, Linkedin, Instagram } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function Navbar() {
