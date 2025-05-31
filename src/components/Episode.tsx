@@ -118,7 +118,7 @@ const Episode: React.FC<EpisodeProps> = ({
         </motion.p>
         
         <div className="mt-auto">
-          {/* Etiquetas */}
+          {/* Etiquetas  */}
           <motion.div 
             className="flex flex-wrap gap-2 mb-4" 
             role="list" 

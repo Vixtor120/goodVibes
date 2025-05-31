@@ -4,6 +4,7 @@
       "master": false,
       "main": true
     }
+    
   },
   "routes": [
     { "handle": "filesystem" },
