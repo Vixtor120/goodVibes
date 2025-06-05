@@ -4,34 +4,21 @@ import Episode from '../components/Episode';
 import episodesData from '../json/episodios.json';
 import { Episode as EpisodeType } from '../interfaces/Episode';
 import { getTagStyle } from '../utils/tagStyles';
-import AudioPlayer from '../components/AudioPlayer';
 import '../styles/animations.css';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAudioDuration } from '../utils/audioUtils';
 
-const HomePage = () => {
-  const [featuredEpisodes, setFeaturedEpisodes] = useState<EpisodeType[]>([]);
+const HomePage = () => {  const [featuredEpisodes, setFeaturedEpisodes] = useState<EpisodeType[]>([]);
   const latestEpisode = episodesData[episodesData.length - 1]; // Actualizado: usamos el último episodio del array
   const navigate = useNavigate();
-  const [latestDuration, setLatestDuration] = useState<string>('Calculando...');
-  const [isLoadingDuration, setIsLoadingDuration] = useState<boolean>(true);
 
   useEffect(() => {
     // Sort episodes by ID in descending order (newest first)
     const sortedEpisodes = [...episodesData].sort((a, b) => b.id - a.id);
     // Get the 3 most recent episodes
     setFeaturedEpisodes(sortedEpisodes.slice(0, 3));
-    // Calculate duration for latest episode
-    if (latestEpisode && latestEpisode.audioUrl) {
-      setIsLoadingDuration(true);
-      getAudioDuration(latestEpisode.audioUrl)
-        .then(duration => setLatestDuration(duration))
-        .catch(() => setLatestDuration('--:--'))
-        .finally(() => setIsLoadingDuration(false));
-    }
-  }, [latestEpisode]);
+  }, []);
 
   // This function is now used for both the latest episode play button and any featured episode
   const handlePlayEpisode = (id: number) => {
@@ -249,10 +236,9 @@ const HomePage = () => {
                 <span className="text-summer-dark text-sm flex items-center font-medium">
                   <Calendar size={14} className="mr-1.5 text-summer-accent"/> 
                   {new Date(latestEpisode.date).toLocaleDateString()}
-                </span>
-                <span className="text-summer-dark text-sm flex items-center font-medium">
+                </span>                <span className="text-summer-dark text-sm flex items-center font-medium">
                   <Clock size={14} className="mr-1.5 text-summer-accent"/> 
-                  {isLoadingDuration ? 'Calculando...' : latestDuration}
+                  {latestEpisode.duration}
                 </span>
               </div>
               
@@ -275,22 +261,15 @@ const HomePage = () => {
                   ))}
                 </div>
               )}
+                <p className="text-summer-dark mb-6 leading-relaxed font-medium">{latestEpisode.description}</p>
               
-              <p className="text-summer-dark mb-6 leading-relaxed font-medium">{latestEpisode.description}</p>
-              
-              <div className="mb-6">
-                <AudioPlayer 
-                  src={latestEpisode.audioUrl} 
-                />
-              </div>
-
               <div className="flex items-center gap-4">
                 <Link 
                   to={`/episodios/${latestEpisode.id}?autoplay=true`}
                   className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-summer-dark px-6 py-3 rounded-full flex items-center font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-yellow-400/30 transform hover:-translate-y-1"
                 >
                   <Play size={18} className="mr-2" />
-                  Reproducir episodio
+                  Ver episodio completo
                 </Link>
                 <Link 
                   to={`/episodios/${latestEpisode.id}`} 
@@ -652,6 +631,8 @@ const HomePage = () => {
                 date={episode.date}
                 imageUrl={episode.imageUrl}
                 label={episode.label}
+                videoUrl={episode.videoUrl}
+                isYoutubeContent={episode.isYoutubeContent}
               />
             </motion.div>
           ))}

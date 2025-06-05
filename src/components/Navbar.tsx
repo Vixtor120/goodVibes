@@ -103,9 +103,8 @@ function Navbar() {
                 <motion.div 
                   whileHover={{ y: -2 }}
                   whileTap={{ y: 0 }}
-                >
-                  <a 
-                    href="https://www.instagram.com" 
+                >                  <a 
+                    href="https://www.instagram.com/vichidsan_/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 p-2 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-pink-500/20 group"
@@ -222,9 +221,8 @@ function Navbar() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 }}
-                  >
-                    <a 
-                      href="https://www.instagram.com" 
+                  >                    <a 
+                      href="https://www.instagram.com/vichidsan_/" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center justify-center p-3 rounded-xl bg-gradient-to-r from-pink-500/90 to-purple-500/90 text-white hover:from-pink-600/90 hover:to-purple-600/90 transition-all duration-300"

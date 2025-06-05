@@ -5,9 +5,20 @@
     "description": "Primer episodio donde hablamos sobre el propósito de Good Vibes, por qué decidimos iniciar este podcast y cómo queremos generar conversación y reflexión combinando temas de tecnología, psicología y comportamiento humano.",
     "duration": "9:01",
     "date": "24 Mar 2025",
-    "imageUrl": "/images/episodes/6.png",
-    "audioUrl": "/audios/episodio1.mp3",
-    "videoUrl": "/videos/episodio1.mp4",
-    "label": ["Charlando", "Introducción"]
+    "imageUrl": "/images/episodes/1.png",
+    "videoUrl": "https://www.youtube.com/watch?v=IdyDtGnmeX0",
+    "label": ["Charlando", "Introducción"],
+    "isYoutubeContent": true
+  },
+  {
+    "id": 2,
+    "title": "Episodio II - Nintendo Switch 2 y sus criticas",
+    "description": "En este segundo episodio de Good Vibes analizamos el lanzamiento de la esperada Nintendo Switch 2 y exploramos las primeras críticas que ha recibido. Hablamos sobre la evolución de la consola, las expectativas de los usuarios, y cómo influye la percepción pública en el éxito de un producto tecnológico. También reflexionamos sobre el vínculo emocional que muchas personas desarrollan con marcas como Nintendo, y cómo esto impacta en su comportamiento como consumidores.",
+    "duration": "27:16",
+    "date": "05 Jun 2025",
+    "imageUrl": "/images/episodes/2.png",
+    "videoUrl": "https://www.youtube.com/watch?v=Y4rcTaCjdE4",
+    "label": ["Videojuegos","Nintendo"],
+    "isYoutubeContent": true
   }
 ]

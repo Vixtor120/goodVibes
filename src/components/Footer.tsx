@@ -139,9 +139,8 @@ const Footer = () => {
               <motion.div 
                 whileHover={{ y: -5 }}
                 whileTap={{ y: 0 }}
-              >
-                <a 
-                  href="https://www.instagram.com" 
+              >                <a 
+                  href="https://www.instagram.com/vichidsan_/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 p-2.5 rounded-xl text-white transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-pink-500/20 group"

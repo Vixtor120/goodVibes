@@ -2,58 +2,42 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import episodesData from '../json/episodios.json';
-import AudioPlayer from '../components/AudioPlayer';
-import VideoPlayer from '../components/VideoPlayer';
-import { Calendar, Clock, Share2, Tag, Loader, Music, Video } from 'lucide-react';
+import { Calendar, Clock, Share2, Tag } from 'lucide-react';
 import { shareEpisode } from '../utils/shareUtils';
-import { getAudioDuration } from '../utils/audioUtils';
+import { getYoutubeEmbedUrl } from '../utils/externalMediaUtils';
 
 import { getTagStyle } from '../utils/tagStyles';
+import { Link } from 'react-router-dom';
 
-const EpisodeDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
+const EpisodeDetailPage = () => {  const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const shouldAutoplay = searchParams.get('autoplay') === 'true';
-  const audioRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<HTMLDivElement>(null);
   const [showShareFeedback, setShowShareFeedback] = useState(false);
-  const [episodeDuration, setEpisodeDuration] = useState<string | null>(null);
-  const [isLoadingDuration, setIsLoadingDuration] = useState(true);
-  const [isVideoMode, setIsVideoMode] = useState(false);
+  const [episode, setEpisode] = useState<any>(null);
   
-  const episode = episodesData.find(ep => ep.id === parseInt(id || '', 10));
-
-  // Load actual audio duration when episode changes
+  // Cargar el episodio desde el archivo JSON
   useEffect(() => {
-    if (episode && episode.videoUrl) {
-      setIsLoadingDuration(true);
-      getAudioDuration(episode.videoUrl)
-        .then(duration => {
-          setEpisodeDuration(duration);
-          setIsLoadingDuration(false);
-        })
-        .catch(error => {
-          console.error("Error getting audio duration:", error);
-          setEpisodeDuration(null); // Don't use fallback, show loading error instead
-          setIsLoadingDuration(false);
-        });
-    }  }, [episode]);
+    // Buscar el episodio directamente del JSON
+    const foundEpisode = episodesData.find(ep => ep.id === parseInt(id || '', 10));
+    
+    if (foundEpisode) {
+      // Asegurarse de que estamos usando exactamente los datos del JSON sin modificaciones
+      setEpisode(foundEpisode);
+      console.log("Cargando episodio con duración:", foundEpisode.duration);
+    }
+  }, [id]);
+  
+  // Preparar la URL del reproductor de YouTube
+  const youtubeEmbedUrl = episode?.videoUrl ? 
+    `${getYoutubeEmbedUrl(episode.videoUrl)}?autoplay=${shouldAutoplay ? 1 : 0}` : 
+    '';
 
-  // Efecto para hacer scroll al reproductor y autoplay si es necesario
+  // Efecto para hacer scroll al reproductor si es necesario
   useEffect(() => {
-    if (shouldAutoplay && audioRef.current) {
+    if (shouldAutoplay && playerRef.current) {
       // Scroll al reproductor
-      audioRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Dar tiempo para que el AudioPlayer se monte completamente
-      const timer = setTimeout(() => {
-        // Enviar evento de clic al botón de reproducción dentro del AudioPlayer
-        const playButton = audioRef.current?.querySelector('button');
-        if (playButton && !playButton.classList.contains('playing')) {
-          playButton.click();
-        }
-      }, 500);
-      
-      return () => clearTimeout(timer);
+      playerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [shouldAutoplay]);
 
@@ -70,13 +54,12 @@ const EpisodeDetailPage = () => {
         staggerChildren: 0.1,
       },
     },
-  };
-  if (!episode) {
+  };  if (!episode) {
     return (
       <div className="container mx-auto px-4 py-16">
-        <div className="text-center text-white">
-          <h2 className="text-2xl font-semibold mb-4">Episodio no encontrado</h2>
-          <p className="text-gray-400">El episodio que estás buscando no existe o ha sido eliminado.</p>
+        <div className="text-center text-summer-dark">
+          <h2 className="text-2xl font-semibold mb-4">Cargando episodio...</h2>
+          <p className="text-gray-600">O el episodio que estás buscando no existe.</p>
         </div>
       </div>
     );
@@ -103,22 +86,14 @@ const EpisodeDetailPage = () => {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-3xl md:text-4xl font-bold text-summer-dark mb-4">{episode.title}</h1>
-        
-        <div className="flex flex-wrap items-center text-sm text-summer-dark gap-4 mb-6">
+          <div className="flex flex-wrap items-center text-sm text-summer-dark gap-4 mb-6">
           <span className="flex items-center border-l-2 border-orange-400 pl-2">
             <Calendar size={16} className="mr-1 text-orange-400" /> 
             {episode.date}
           </span>
           <span className="flex items-center border-l-2 border-summer-turquoise pl-2">
             <Clock size={16} className="mr-1 text-summer-turquoise" /> 
-            {isLoadingDuration ? (
-              <span className="flex items-center">
-                <Loader size={12} className="animate-spin mr-1 text-summer-accent" />
-                Calculando...
-              </span>
-            ) : (
-              episodeDuration || episode.duration
-            )}
+            {episode.duration}
           </span>
         </div>
 
@@ -144,34 +119,7 @@ const EpisodeDetailPage = () => {
               </motion.span>
             ))}
           </motion.div>
-        )}
-
-        {/* Media Toggle Controls */}
-        <div className="absolute top-0 right-0 flex items-center rounded-bl-lg overflow-hidden shadow-lg">
-          <button
-            onClick={() => setIsVideoMode(false)}
-            className={`p-2 flex items-center justify-center border-t-2 ${
-              !isVideoMode 
-                ? 'border-t-orange-500 bg-white text-orange-500 shadow-inner' 
-                : 'border-t-transparent bg-gray-100 text-gray-600 hover:bg-white/90'
-            } transition-all duration-300`}
-            aria-label="Cambiar a Audio"
-          >
-            <Music size={20} />
-          </button>
-          <button
-            onClick={() => setIsVideoMode(true)}
-            className={`p-2 flex items-center justify-center border-t-2 ${
-              isVideoMode 
-                ? 'border-t-orange-500 bg-white text-orange-500 shadow-inner' 
-                : 'border-t-transparent bg-gray-100 text-gray-600 hover:bg-white/90'
-            } transition-all duration-300`}
-            aria-label="Cambiar a Video"
-          >
-            <Video size={20} />
-          </button>
-        </div>
-      </motion.div>
+        )}      </motion.div>
       
       {/* Content */}
       <motion.div 
@@ -180,23 +128,20 @@ const EpisodeDetailPage = () => {
         initial="initial"
         animate="animate"
       >
-        <div className="md:col-span-2">
-          {/* Cover Image or Video */}
-          {!isVideoMode && (
-            <motion.div
-              className="w-full aspect-video relative mb-6 border-t-4 border-orange-500 shadow-lg rounded-xl overflow-hidden"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <img 
-                src={episode.imageUrl} 
-                alt={episode.title} 
-                className="w-full aspect-video object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-            </motion.div>
-          )}
+        <div className="md:col-span-2">          {/* Episode Cover Image */}
+          <motion.div
+            className="w-full aspect-video relative mb-6 border-t-4 border-orange-500 shadow-lg rounded-xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <img 
+              src={episode.imageUrl} 
+              alt={episode.title} 
+              className="w-full aspect-video object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          </motion.div>
 
           {/* Description */}
           <motion.div 
@@ -206,16 +151,23 @@ const EpisodeDetailPage = () => {
             <p className="text-summer-dark leading-relaxed">{episode.description}</p>
           </motion.div>
 
-          {/* Media Player */}
+          {/* YouTube Embedded Player */}
           <motion.div 
-            ref={audioRef}
+            ref={playerRef}
             className="mb-8 bg-white rounded-xl shadow-xl overflow-hidden"
             variants={fadeInUp}
           >
-            {isVideoMode && episode.videoUrl ? (
-              <VideoPlayer src={episode.videoUrl} autoplay={shouldAutoplay} />
-            ) : episode.videoUrl ? (
-              <AudioPlayer src={episode.videoUrl} autoplay={shouldAutoplay} />
+            {episode.videoUrl && episode.isYoutubeContent ? (
+              <div className="aspect-video">
+                <iframe
+                  src={youtubeEmbedUrl}
+                  title={`YouTube video: ${episode.title}`}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
             ) : (
               <div className="p-4 text-summer-dark text-center bg-orange-50">
                 No hay contenido multimedia disponible
@@ -277,6 +229,36 @@ const EpisodeDetailPage = () => {
                   Comparte este episodio con tus amigos y ayúdanos a difundir las buenas vibraciones del verano.
                 </p>
               </div>
+            </div>
+
+            {/* Other Episodes Navigation Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6 border border-summer-accent/10">
+              <h2 className="text-lg font-semibold text-summer-dark mb-4 flex items-center gap-2">
+                <span role="img" aria-label="Episodios">🎧</span>
+                Otros episodios
+              </h2>
+              <ul className="flex flex-col gap-3 max-h-[420px] overflow-y-auto pr-1">
+                {episodesData.filter(ep => ep.id !== episode.id).map(ep => (
+                  <li key={ep.id}>
+                    <Link to={`/episodios/${ep.id}`} className="flex items-center gap-3 rounded-lg hover:bg-orange-50 transition p-2 group">
+                      <img
+                        src={ep.imageUrl}
+                        alt={ep.title}
+                        className="w-12 h-12 rounded-lg object-cover border border-orange-100 shadow-sm"
+                        onError={e => { e.currentTarget.src = 'https://via.placeholder.com/48x48?text=GoodVibes'; }}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-summer-dark text-sm truncate group-hover:text-orange-600">{ep.title}</div>
+                        <div className="text-xs text-gray-500 flex gap-2 mt-0.5">
+                          <span>{ep.date}</span>
+                          <span>·</span>
+                          <span>{ep.duration}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </motion.div>

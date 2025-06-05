@@ -8,6 +8,14 @@ export const getAudioDuration = (audioUrl: string): Promise<string> => {
     console.error('Invalid audio URL provided (empty or undefined)');
     return Promise.reject(new Error('Invalid audio URL provided'));
   }
+    // Check if it's a YouTube URL
+  // Note: We no longer set a placeholder duration for YouTube URLs
+  // because we already have the duration in the episode data
+  if (audioUrl.includes('youtube.com') || audioUrl.includes('youtu.be')) {
+    console.log(`YouTube URL detected: ${audioUrl}. Using duration from episode data.`);
+    // Return null to indicate that we should use the duration from the episode data
+    return Promise.reject(new Error("Use duration from episode data instead"));
+  }
 
   console.log(`Starting getAudioDuration for: ${audioUrl}`);
   
@@ -112,15 +120,24 @@ export const updateEpisodesDuration = async (episodes: any[]): Promise<any[]> =>
     const updatedEpisodes = [];
     
     for (const episode of episodes) {
-      try {
-        // Only calculate if the episode has a video/audio URL
-        if (episode.videoUrl) {
+      try {        // Skip YouTube content as we already have their durations in the episode data
+        if (episode.videoUrl && episode.isYoutubeContent) {
+          console.log(`Skipping duration calculation for YouTube episode ${episode.id}: ${episode.videoUrl}`);
+          updatedEpisodes.push(episode); // Keep the original duration for YouTube videos
+        }
+        // Only calculate if the episode has a non-YouTube video/audio URL
+        else if (episode.videoUrl) {
           console.log(`Calculating duration for episode ${episode.id}: ${episode.videoUrl}`);
-          const duration = await getAudioDuration(episode.videoUrl);
-          console.log(`Episode ${episode.id} duration calculated: ${duration} (was: ${episode.duration})`);
-          
-          // Create a new object with the updated duration
-          updatedEpisodes.push({ ...episode, duration });
+          try {
+            const duration = await getAudioDuration(episode.videoUrl);
+            console.log(`Episode ${episode.id} duration calculated: ${duration} (was: ${episode.duration})`);
+            
+            // Create a new object with the updated duration
+            updatedEpisodes.push({ ...episode, duration });
+          } catch (error) {
+            console.log(`Could not calculate duration for episode ${episode.id}, keeping original: ${episode.duration}`);
+            updatedEpisodes.push(episode); // Keep original duration on error
+          }
         } else {
           updatedEpisodes.push(episode);
         }

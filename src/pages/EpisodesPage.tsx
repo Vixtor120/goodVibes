@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import Episode from '../components/Episode';
+import { getTagStyle } from '../utils/tagStyles';
 import episodesData from '../json/episodios.json';
 import { Episode as EpisodeType } from '../interfaces/Episode';
 import { Play, Filter, ChevronDown, Loader, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { updateEpisodesDuration } from '../utils/audioUtils';
-import { getTagStyle } from '../utils/tagStyles';
 
 const EpisodesPage = () => {
   const [episodes, setEpisodes] = useState<EpisodeType[]>([]);
@@ -22,32 +21,12 @@ const EpisodesPage = () => {
   )].sort();
 
   useEffect(() => {
-    const loadEpisodes = async () => {
-      setIsLoading(true);
-      try {
-        // Create a safe copy of the episodes data
-        const episodesCopy = JSON.parse(JSON.stringify(episodesData));
-        
-        // Update episode durations with actual audio duration
-        const episodesWithDuration = await updateEpisodesDuration(episodesCopy);
-        
-        // Sort episodes by ID in descending order
-        const sortedEpisodes = episodesWithDuration.sort((a, b) => b.id - a.id);
-        
-        setEpisodes(sortedEpisodes);
-        setFilteredEpisodes(sortedEpisodes);
-      } catch (error) {
-        console.error("Error loading episodes:", error);
-        // Fallback to using episodes without duration calculation
-        const sortedEpisodes = [...episodesData].sort((a, b) => b.id - a.id);
-        setEpisodes(sortedEpisodes);
-        setFilteredEpisodes(sortedEpisodes);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadEpisodes();
+    setIsLoading(true);
+    // Usar directamente los datos del JSON, ordenados por id descendente
+    const sortedEpisodes = [...episodesData].sort((a, b) => b.id - a.id);
+    setEpisodes(sortedEpisodes);
+    setFilteredEpisodes(sortedEpisodes);
+    setIsLoading(false);
   }, []);
 
   // Filter episodes when tag changes

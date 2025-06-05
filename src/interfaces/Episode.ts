@@ -5,6 +5,7 @@ export interface Episode {
   duration: string; // duracion del episodio
   date: string; //fecha de publicacion del episodio
   imageUrl: string; // imagen del episodio
-  videoUrl: string; //episodio en mp3 en el el usuario podra escuchar el podcast
+  videoUrl: string; // URL de YouTube para el episodio
   label?: string[]; //etiquetas para los episodios
+  isYoutubeContent?: boolean; // Indicador si el contenido está en YouTube
 }

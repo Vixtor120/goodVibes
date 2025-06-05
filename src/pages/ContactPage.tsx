@@ -6,7 +6,7 @@ const ContactPage = () => {
     {
       name: 'Instagram',
       icon: Instagram,
-      url: 'https://instagram.com/goodvibespodcast',
+      url: 'https://www.instagram.com/vichidsan_/',
       color: 'from-pink-500 to-purple-500',
       description: 'Síguenos para contenido exclusivo y actualizaciones diarias'
     },    {

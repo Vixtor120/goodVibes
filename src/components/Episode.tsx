@@ -5,11 +5,7 @@ import { useState } from 'react';
 import { shareEpisode } from '../utils/shareUtils';
 import { motion } from 'framer-motion';
 
-
-
-interface EpisodeProps extends Omit<EpisodeType, 'videoUrl'> {
-  videoUrl?: string;
-}
+ type EpisodeProps = EpisodeType;
 
 const Episode: React.FC<EpisodeProps> = ({ 
   id, 
@@ -19,9 +15,8 @@ const Episode: React.FC<EpisodeProps> = ({
   date,
   imageUrl,
   label = [],
-}) => {
-  const [showShareFeedback, setShowShareFeedback] = useState(false);
-
+}) => {  const [showShareFeedback, setShowShareFeedback] = useState(false);
+  
   const handleShare = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -32,7 +27,7 @@ const Episode: React.FC<EpisodeProps> = ({
       setTimeout(() => setShowShareFeedback(false), 2000);
     }
   };
-
+  
   return (
     <motion.article 
       className="card-summer overflow-hidden h-[460px] shadow-lg transition-all duration-300 flex flex-col rounded-2xl bg-white border border-summer-accent/10"
@@ -48,10 +43,8 @@ const Episode: React.FC<EpisodeProps> = ({
     >
       <div className="relative h-[200px] overflow-hidden group" role="img" aria-label={`Imagen del episodio: ${title}`}>
         {/* Línea decorativa superior */}
-        <div className="absolute top-0 left-0 z-20 w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600" 
-             role="presentation"></div>
-        
-        {/* Imagen con efecto hover */}
+        <div className="absolute top-0 left-0 z-20 w-full h-1 bg-gradient-to-r from-orange-400 to-orange-600" role="presentation"></div>
+        {/* Siempre mostrar la imagen de portada, nunca el video */}
         <img 
           src={imageUrl} 
           alt={`Imagen de portada para el episodio: ${title}`} 
@@ -60,14 +53,14 @@ const Episode: React.FC<EpisodeProps> = ({
             e.currentTarget.src = 'https://via.placeholder.com/300x200?text=GoodVibes';
           }}
         />
-        
-        {/* Overlay gradiente */}
+        {/* Overlay gradiente y meta info siguen igual */}
         <div 
           className="absolute inset-0 bg-gradient-to-t from-summer-dark to-transparent flex items-end"
           style={{
             background: 'linear-gradient(to top, rgba(0, 52, 89, 0.9) 0%, rgba(0, 52, 89, 0.4) 60%, rgba(0, 52, 89, 0) 100%)'
           }}
-          role="presentation">
+          role="presentation"
+        >
           <div className="p-6 w-full relative z-20">
             {/* Meta información */}
             <div className="flex flex-wrap items-center gap-2 text-sm" aria-label="Duración y fecha del episodio">
@@ -79,7 +72,8 @@ const Episode: React.FC<EpisodeProps> = ({
               >
                 <Clock size={14} className="mr-1.5" aria-hidden="true" />
                 <span className="font-medium">{duration}</span>
-              </motion.span>              <motion.span 
+              </motion.span>
+              <motion.span 
                 className="flex items-center bg-gradient-to-r from-teal-50 to-emerald-50 text-teal-700 border border-teal-200/40 px-3 py-1 rounded-full shadow-sm backdrop-blur-sm hover:shadow-md hover:border-teal-300/40 transition-all duration-300"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -93,7 +87,6 @@ const Episode: React.FC<EpisodeProps> = ({
           </div>
         </div>
       </div>
-
       <div className="flex-grow p-6 flex flex-col">
         {/* Título */}
         <motion.h2 
@@ -105,7 +98,6 @@ const Episode: React.FC<EpisodeProps> = ({
         >
           {title}
         </motion.h2>
-
         {/* Descripción */}
         <motion.p 
           className="text-gray-600 mb-4 line-clamp-3" 
@@ -116,7 +108,6 @@ const Episode: React.FC<EpisodeProps> = ({
         >
           {description}
         </motion.p>
-        
         <div className="mt-auto">
           {/* Etiquetas  */}
           <motion.div 
@@ -127,7 +118,8 @@ const Episode: React.FC<EpisodeProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
           >
-            {label.map((tag, index) => (              <motion.span
+            {label.map((tag, index) => (
+              <motion.span
                 key={index}
                 className={getTagStyle(index)}
                 whileHover={{ scale: 1.03, y: -2 }}
@@ -141,20 +133,21 @@ const Episode: React.FC<EpisodeProps> = ({
               </motion.span>
             ))}
           </motion.div>
-          
           {/* Botón compartir y feedback */}
           <div className="flex justify-between items-center">
-            <motion.button
-              onClick={handleShare}
-              className="text-orange-500 hover:text-orange-600 transition-colors flex items-center gap-2 group"
-              aria-label={`Compartir episodio: ${title}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Share2 size={20} className="group-hover:rotate-12 transition-transform" aria-hidden="true" />
-              <span className="font-medium">Compartir</span>
-            </motion.button>
-            
+            <div className="flex gap-4">
+              {/* Eliminado el botón 'Ver' para previsualizar el video */}
+              <motion.button
+                onClick={handleShare}
+                className="text-orange-500 hover:text-orange-600 transition-colors flex items-center gap-2 group"
+                aria-label={`Compartir episodio: ${title}`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Share2 size={20} className="group-hover:rotate-12 transition-transform" aria-hidden="true" />
+                <span className="font-medium">Compartir</span>
+              </motion.button>
+            </div>
             {showShareFeedback && (
               <motion.div 
                 className="absolute bottom-4 right-4 bg-green-100 text-green-800 px-4 py-2 rounded-lg shadow-lg"

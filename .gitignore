@@ -19,20 +19,18 @@ lerna-debug.log*
 /build
 /dist
 
-# Misc
+# Large media files - Not needed anymore since we use YouTube
+/public/audios/*.mp3
+/public/videos/*.mp4
+
+# Git LFS files - Not needed anymore since we use YouTube
+# .gitattributes file can be removed as it's no longer needed
+
+# Otros
 .DS_Store
+*.local
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
